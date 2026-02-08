@@ -14,16 +14,17 @@
         android:layout_marginBottom="24dp" />
 
     <EditText
-        android:id="@+id/et_inspector_license"
+        android:id="@+id/et_inspector_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Inspector License Number"
+        android:hint="Please enter your Email"
         android:inputType="text" />
 
     <EditText
+        android:id="@+id/password_insp_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Password"
+        android:hint="Please eneter your Password"
         android:inputType="textPassword" />
 
     <Button

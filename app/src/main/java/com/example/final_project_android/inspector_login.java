@@ -6,13 +6,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button; // Don't forget this import
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
 /**
  * Handles the login process for Inspectors.
  * Connects "Login" button to the Inspector Dashboard.
  */
 public class inspector_login extends Fragment {
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -30,6 +38,14 @@ public class inspector_login extends Fragment {
         // Login Button Logic
         // Ensure your XML has a button with id: btn_login (or add it if missing)
         Button btnLogin = view.findViewById(R.id.btn_login); // You might need to add this ID in XML if it's missing
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity mainActivity =(MainActivity) getActivity();
+                mainActivity.login_inspector();
+            }
+        });
+
 
         // If btnLogin is null, check your XML file!
         // Assuming standard button exists:
