@@ -1,0 +1,64 @@
+package com.example.final_project_android;
+
+import android.graphics.Color;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button; // שימוש ב-Button רגיל
+import android.widget.CalendarView;
+import android.widget.Toast;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+public class inspector_schedule extends Fragment {
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_inspector_schedule, container, false);
+
+        // Find views
+        Button btnList = view.findViewById(R.id.btn_view_list);
+        Button btnCalendar = view.findViewById(R.id.btn_view_calendar);
+        RecyclerView rvList = view.findViewById(R.id.rv_schedule_list);
+        CalendarView cvCalendar = view.findViewById(R.id.cv_schedule_calendar);
+
+        // --- התיקון נמצא כאן ---
+        // שינינו מ-FloatingActionButton ל-Button רגיל כדי להתאים ל-XML
+        Button fabAdd = view.findViewById(R.id.fab_add_schedule);
+
+        // Setup dummy list
+        rvList.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvList.setAdapter(new RestaurantAdapter(name -> {}));
+
+        // Toggle Logic: Show List
+        btnList.setOnClickListener(v -> {
+            rvList.setVisibility(View.VISIBLE);
+            cvCalendar.setVisibility(View.GONE);
+
+            btnList.setBackgroundColor(0xFF2196F3); // Blue
+            btnList.setTextColor(Color.WHITE);
+            btnCalendar.setBackgroundColor(Color.WHITE);
+            btnCalendar.setTextColor(Color.BLACK);
+        });
+
+        // Toggle Logic: Show Calendar
+        btnCalendar.setOnClickListener(v -> {
+            rvList.setVisibility(View.GONE);
+            cvCalendar.setVisibility(View.VISIBLE);
+
+            btnCalendar.setBackgroundColor(0xFF2196F3); // Blue
+            btnCalendar.setTextColor(Color.WHITE);
+            btnList.setBackgroundColor(Color.WHITE);
+            btnList.setTextColor(Color.BLACK);
+        });
+
+        // Add Button Logic
+        fabAdd.setOnClickListener(v -> {
+            Toast.makeText(getActivity(), "Open Add Schedule Dialog", Toast.LENGTH_SHORT).show();
+        });
+
+        return view;
+    }
+}
