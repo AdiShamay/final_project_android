@@ -21,15 +21,13 @@ public class inspector_register extends Fragment {
 
         // Find the "Complete Registration" button
         Button btnFinish = view.findViewById(R.id.btn_finish_inspector_reg);
-        btnFinish.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            MainActivity mainActivity =(MainActivity) getActivity();
-            mainActivity.register_inspector();
-            // Show a success message
-            Toast.makeText(getActivity(), "Inspector application submitted!", Toast.LENGTH_SHORT).show();
-        }
-    });
+        btnFinish.setOnClickListener(v -> {
+            MainActivity mainActivity = (MainActivity) getActivity();
+            if (mainActivity != null) {
+                // It now only happens in MainActivity if the registration actually works.
+                mainActivity.register_inspector();
+            }
+        });
         return view;
     }
 }

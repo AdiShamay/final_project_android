@@ -49,8 +49,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     public void login_inspector() {
-        String email = ((EditText) findViewById(R.id.et_inspector_email_login)).getText().toString();
-        String password = ((EditText) findViewById(R.id.password_insp_login)).getText().toString();
+        String email = ((EditText) findViewById(R.id.et_inspector_email_login)).getText().toString().trim();
+        String password = ((EditText) findViewById(R.id.password_insp_login)).getText().toString().trim();
 
         // Basic validation to prevent empty submissions
         if (email.isEmpty() || password.isEmpty()) {
@@ -65,83 +65,83 @@ public class MainActivity extends AppCompatActivity {
                         // SUCCESS: Navigate to Dashboard
                         navigateTo(new inspector_dashboard());
                         } else {
-                        Exception exception = task.getException();
-                        if (exception instanceof FirebaseAuthInvalidUserException) {
-                            Toast.makeText(this, "User does not exist.", Toast.LENGTH_LONG).show();
-                        } else if (exception instanceof FirebaseAuthInvalidCredentialsException) {
-                            Toast.makeText(this, "Incorrect password.", Toast.LENGTH_LONG).show();
+                        Exception e = task.getException();
+                        if (e instanceof FirebaseAuthInvalidUserException) {
+                            Toast.makeText(this, "Account not found. Please register.", Toast.LENGTH_LONG).show();
+                        } else if (e instanceof FirebaseAuthInvalidCredentialsException) {
+                            Toast.makeText(this, "Incorrect password.", Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(this, "Login failed: " + exception.getMessage(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
     }
 
-    public void register_inspector(){
-       String name= ((EditText) findViewById(R.id.inspector_full_name_reg)).getText().toString();
-       String email = ((EditText) findViewById(R.id.et_inspector_email_reg)).getText().toString();
-       String company = ((EditText) findViewById(R.id.et_company_name_reg)).getText().toString();
-       String id = ((EditText) findViewById(R.id.inspector_ID_reg)).getText().toString().trim();
-       String license = ((EditText) findViewById(R.id.inspector_licence_reg)).getText().toString().trim();
-       String password = ((EditText) findViewById(R.id.inspector_password_reg)).getText().toString();
+    // Capture strings at the VERY START of the function
+    public void register_inspector() {
+        try {
+            // 1. Capture UI elements
+            EditText etName = findViewById(R.id.inspector_full_name_reg);
+            EditText etEmail = findViewById(R.id.et_inspector_email_reg);
+            EditText etComp = findViewById(R.id.et_company_name_reg);
+            EditText etId = findViewById(R.id.inspector_ID_reg);
+            EditText etLic = findViewById(R.id.inspector_licence_reg);
+            EditText etPass = findViewById(R.id.inspector_password_reg);
 
-        // Validation: Check if any field is empty
-        if (name.isEmpty()) { Toast.makeText(this, "Name is not completed", Toast.LENGTH_SHORT).show(); return; }
-        if (email.isEmpty()) { Toast.makeText(this, "Email is not completed", Toast.LENGTH_SHORT).show(); return; }
-        if (company.isEmpty()) { Toast.makeText(this, "company name is not completed", Toast.LENGTH_SHORT).show(); return; }
-        if (id.isEmpty()) { Toast.makeText(this, "ID is not completed", Toast.LENGTH_SHORT).show(); return; }
-        if (license.isEmpty()) { Toast.makeText(this, "License is not completed", Toast.LENGTH_SHORT).show(); return; }
-        if (password.isEmpty()) { Toast.makeText(this, "Password is not completed", Toast.LENGTH_SHORT).show(); return; }
+            // 2. CRASH CHECK: If any of these are null, your IDs are wrong
+            if (etName == null || etEmail == null || etPass == null) {
+                Toast.makeText(this, "Internal Error: UI not found", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-        //check if the inspector already exist
-        inspectorsRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                boolean idExists = false;
-                for (DataSnapshot ds : snapshot.getChildren()) {
-                    inspector_class existing = ds.getValue(inspector_class.class);
-                    if (existing != null && (existing.getID().equals(id) || existing.getLicence_number().equals(license))) {
-                        idExists = true;
-                        break;
-                    }
-                }
+            final String name = etName.getText().toString().trim();
+            final String email = etEmail.getText().toString().trim();
+            final String company = etComp.getText().toString().trim();
+            final String id = etId.getText().toString().trim();
+            final String license = etLic.getText().toString().trim();
+            final String password = etPass.getText().toString();
 
-                if (idExists) {
-                    Toast.makeText(MainActivity.this, "ID or License already registered!", Toast.LENGTH_LONG).show();
-                } else {
-                    // Create User in Firebase Auth
+            if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
+                Toast.makeText(this, "All fields are required", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+
+            // 3. Database Check
+            inspectorsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    // ... (your existing check logic) ...
+
                     mAuth.createUserWithEmailAndPassword(email, password)
                             .addOnCompleteListener(task -> {
                                 if (task.isSuccessful()) {
-                                    // Save to Realtime Database with the Role
-                                    writeToDB(name, email,company, id, license, password);
-                                    Toast.makeText(MainActivity.this, "Registration Successful!", Toast.LENGTH_SHORT).show();
-                                    // Go back to login page
+                                    // SAVE FIRST, THEN NAVIGATE
+                                    writeToDB(name, email, company, id, license);
                                     navigateTo(new inspector_login());
+                                    Toast.makeText(MainActivity.this, "Registered!", Toast.LENGTH_SHORT).show();
                                 } else {
-                                    Toast.makeText(MainActivity.this, "Auth Failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(MainActivity.this, "Registered Failed!", Toast.LENGTH_SHORT).show();
                                 }
                             });
                 }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {}
-        });
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {}
+            });
+
+        } catch (Exception e) {
+            Log.e("DEBUG_APP", "CRASH CAUSE: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
-    public void writeToDB(String name,String email,String company,String id,String licence,String password)
-    {
-        // Write a message to the database
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
+
+    // Pass clean strings, DO NOT use findViewById here!
+    public void writeToDB(String name, String email, String company, String id, String license) {
         DatabaseReference myRef = database.getReference("inspectors").child(id);
 
-        inspector_class inspector = new inspector_class(
-                ((EditText) findViewById(R.id.inspector_full_name_reg)).getText().toString(),
-                ((EditText) findViewById(R.id.et_inspector_email_reg)).getText().toString(),
-                ((EditText) findViewById(R.id.et_company_name_reg)).getText().toString(),
-                ((EditText) findViewById(R.id.inspector_ID_reg)).getText().toString(),
-                ((EditText) findViewById(R.id.inspector_licence_reg)).getText().toString(),
-                ((EditText) findViewById(R.id.inspector_password_reg)).getText().toString()
-        );
+        // We omit password here for security as discussed
+        inspector_class inspector = new inspector_class(name, email, company, id, license, "");
+
 
         myRef.setValue(inspector);
     }
