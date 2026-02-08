@@ -21,16 +21,15 @@ public class inspector_register extends Fragment {
 
         // Find the "Complete Registration" button
         Button btnFinish = view.findViewById(R.id.btn_finish_inspector_reg);
-
-        // Handle the finish button click
-        btnFinish.setOnClickListener(v -> {
+        btnFinish.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            MainActivity mainActivity =(MainActivity) getActivity();
+            mainActivity.register_inspector();
             // Show a success message
             Toast.makeText(getActivity(), "Inspector application submitted!", Toast.LENGTH_SHORT).show();
-
-            // Navigate back to the previous screen (Login)
-            getParentFragmentManager().popBackStack();
-        });
-
+        }
+    });
         return view;
     }
 }

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/inspector_login">
+
+    <fragment
+        android:id="@+id/inspector_login"
+        android:name="com.example.final_project_android.inspector_login"
+        android:label="inspector_login" >
+        <action
+            android:id="@+id/action_inspector_login_to_inspector_dashboard"
+            app:destination="@id/inspector_dashboard" />
+    </fragment>
+    <fragment
+        android:id="@+id/inspector_register"
+        android:name="com.example.final_project_android.inspector_register"
+        android:label="inspector_register" >
+        <action
+            android:id="@+id/action_inspector_register_to_inspector_login"
+            app:destination="@id/inspector_login" />
+    </fragment>
+    <fragment
+        android:id="@+id/inspector_dashboard"
+        android:name="com.example.final_project_android.inspector_dashboard"
+        android:label="inspector_dashboard" />
+</navigation>

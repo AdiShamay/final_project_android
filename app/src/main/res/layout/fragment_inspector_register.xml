@@ -18,30 +18,33 @@
             android:layout_marginBottom="20dp" />
 
         <EditText
+            android:id="@+id/inspector_full_name_reg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Full Name" />
 
         <EditText
-            android:id="@+id/et_inspector_email"
+            android:id="@+id/et_inspector_email_reg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Email Address"
             android:inputType="textEmailAddress" />
 
         <EditText
-            android:id="@+id/et_company_name"
+            android:id="@+id/et_company_name_reg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Organization / Company Name" />
 
         <EditText
+            android:id="@+id/inspector_ID_reg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="National ID Number"
             android:inputType="number" />
 
         <EditText
+            android:id="@+id/inspector_licence_reg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Inspector License Number" />
@@ -60,6 +63,7 @@
             android:backgroundTint="#808080" />
 
         <EditText
+            android:id="@+id/inspector_password_reg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Password"

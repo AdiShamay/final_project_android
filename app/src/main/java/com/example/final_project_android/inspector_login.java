@@ -37,26 +37,14 @@ public class inspector_login extends Fragment {
 
         // Login Button Logic
         // Ensure your XML has a button with id: btn_login (or add it if missing)
-        Button btnLogin = view.findViewById(R.id.btn_login); // You might need to add this ID in XML if it's missing
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MainActivity mainActivity =(MainActivity) getActivity();
+        Button btnLogin = view.findViewById(R.id.btn_login);
+        btnLogin.setOnClickListener(v -> {
+            MainActivity mainActivity = (MainActivity) getActivity();
+            if (mainActivity != null) {
+                // We only call the function. The MainActivity handles the navigation
                 mainActivity.login_inspector();
             }
         });
-
-
-        // If btnLogin is null, check your XML file!
-        // Assuming standard button exists:
-        if (btnLogin != null) {
-            btnLogin.setOnClickListener(v -> {
-                getParentFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, new inspector_dashboard())
-                        .addToBackStack(null)
-                        .commit();
-            });
-        }
 
         return view;
     }

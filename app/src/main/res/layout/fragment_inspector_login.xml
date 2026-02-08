@@ -14,7 +14,7 @@
         android:layout_marginBottom="24dp" />
 
     <EditText
-        android:id="@+id/et_inspector_email"
+        android:id="@+id/et_inspector_email_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Please enter your Email"
