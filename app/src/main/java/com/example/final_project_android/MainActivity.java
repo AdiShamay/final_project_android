@@ -79,55 +79,57 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void register_inspector() {
-        //inspector input
-        final String name = ((EditText) findViewById(R.id.inspector_full_name_reg)).getText().toString().trim();
-        final String email = ((EditText) findViewById(R.id.et_inspector_email_reg)).getText().toString().trim();
-        final String company = ((EditText) findViewById(R.id.et_company_name_reg)).getText().toString().trim();
-        final String id = ((EditText) findViewById(R.id.inspector_ID_reg)).getText().toString().trim();
-        final String license = ((EditText) findViewById(R.id.inspector_licence_reg)).getText().toString().trim();
-        final String password = ((EditText) findViewById(R.id.inspector_password_reg)).getText().toString().trim();
+        // 1. Capture UI Elements
+        EditText etName = findViewById(R.id.inspector_full_name_reg);
+        EditText etEmail = findViewById(R.id.et_inspector_email_reg);
+        EditText etComp = findViewById(R.id.et_company_name_reg);
+        EditText etId = findViewById(R.id.inspector_ID_reg);
+        EditText etLic = findViewById(R.id.inspector_licence_reg);
+        EditText etPass = findViewById(R.id.inspector_password_reg);
 
-        //checking all the fields are complete
-        if (name.isEmpty()) { Toast.makeText(this, "Name is not completed", Toast.LENGTH_SHORT).show(); return; }
-        if (email.isEmpty()) { Toast.makeText(this, "Email is not completed", Toast.LENGTH_SHORT).show(); return; }
-        if (company.isEmpty()) { Toast.makeText(this, "Company name is not completed", Toast.LENGTH_SHORT).show(); return; }
-        if (id.isEmpty()) { Toast.makeText(this, "ID is not completed", Toast.LENGTH_SHORT).show(); return; }
-        if (license.isEmpty()) { Toast.makeText(this, "License is not completed", Toast.LENGTH_SHORT).show(); return; }
-        if (password.isEmpty()) { Toast.makeText(this, "Password is not completed", Toast.LENGTH_SHORT).show(); return; }
+        // 2. Safety Check
+        if (etName == null || etEmail == null || etPass == null || etComp == null || etId == null || etLic == null) {
+            return;
+        }
 
+        final String name = etName.getText().toString().trim();
+        final String email = etEmail.getText().toString().trim();
+        final String company = etComp.getText().toString().trim();
+        final String id = etId.getText().toString().trim();
+        final String license = etLic.getText().toString().trim();
+        final String password = etPass.getText().toString().trim();
 
-        // 3. Database Check: Ensure ID or License doesn't already exist
+        // 3. Validation
+        if (name.isEmpty() || email.isEmpty() || password.isEmpty() || id.isEmpty() || license.isEmpty()) {
+            Toast.makeText(this, "Please fill in all required fields", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // 4. Database Check for existing ID or License
         inspectorsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                boolean idOrLicenseExists = false;
+                boolean alreadyInDB = false;
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     inspector_class existing = ds.getValue(inspector_class.class);
-                    if (existing != null && (existing.getID().equals(id) || existing.getLicence_number().equals(license))||existing.getEmail().equals(email)) {
-                        idOrLicenseExists = true;
+                    if (existing != null && (existing.getID().equals(id) || existing.getLicence_number().equals(license))) {
+                        alreadyInDB = true;
                         break;
                     }
                 }
 
-                if (idOrLicenseExists) {
-                    // Case: User already exists (ID or License)
-                    Toast.makeText(MainActivity.this, "User already exist!", Toast.LENGTH_LONG).show();
+                if (alreadyInDB) {
+                    Toast.makeText(MainActivity.this, "ID or License already registered!", Toast.LENGTH_LONG).show();
                 } else {
-                    // 4. Create User in Firebase Auth
+                    // 5. Create Firebase Auth account
                     mAuth.createUserWithEmailAndPassword(email, password)
                             .addOnCompleteListener(MainActivity.this, task -> {
                                 if (task.isSuccessful()) {
-                                    // 5. Save to Realtime Database using the ID as the key
                                     writeToDBInspector(name, email, company, id, license);
-
-                                    // Show success toast only when registration works
                                     Toast.makeText(MainActivity.this, "Registration Successful!", Toast.LENGTH_SHORT).show();
-
-                                    // Navigate back to login page
                                     navigateTo(new inspector_login());
                                 } else {
-                                    // Handle failure (e.g., password too weak, email malformed)
-                                    Toast.makeText(MainActivity.this, "Registration Failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(MainActivity.this, "Auth Failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                                 }
                             });
                 }
@@ -135,11 +137,10 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(MainActivity.this, "Database error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Database Error", Toast.LENGTH_SHORT).show();
             }
         });
     }
-
     public void writeToDBInspector(String name, String email, String company, String id, String license) {
         DatabaseReference myRef = database.getReference("inspectors").child(id);
         inspector_class inspector = new inspector_class(name, email, company, id, license, "");
