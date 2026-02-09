@@ -13,16 +13,17 @@
         android:layout_marginBottom="24dp" />
 
     <EditText
-        android:id="@+id/et_restaurant_username"
+        android:id="@+id/et_restaurant_email_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Username / Restaurant Name"
+        android:hint="please enter your email"
         android:inputType="text" />
 
     <EditText
+        android:id="@+id/restaurant_password_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Password"
+        android:hint="Please enter your password"
         android:inputType="textPassword" />
 
     <Button

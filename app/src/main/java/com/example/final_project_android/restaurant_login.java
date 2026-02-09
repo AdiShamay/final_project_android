@@ -32,16 +32,12 @@ public class restaurant_login extends Fragment {
 
         // Find the Login button
         Button btnLogin = view.findViewById(R.id.btn_login);
-
-        // Handle Login button click to navigate to Dashboard
         btnLogin.setOnClickListener(v -> {
-            // Navigate to the Restaurant Dashboard fragment
-            getParentFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new restaurant_dashboard())
-                    .addToBackStack(null)
-                    .commit();
+            MainActivity mainActivity = (MainActivity) getActivity();
+            if (mainActivity != null) {
+                mainActivity.login_restaurant();
+            }
         });
-
         return view;
     }
 }

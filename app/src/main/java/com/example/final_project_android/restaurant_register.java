@@ -23,13 +23,12 @@ public class restaurant_register extends Fragment {
 
         // Handle the submission action
         btnFinish.setOnClickListener(v -> {
-            // Show a confirmation message to the user
-            Toast.makeText(getActivity(), "Registration Sent!", Toast.LENGTH_SHORT).show();
-
-            // Return to the previous screen (Login)
-            getParentFragmentManager().popBackStack();
+            MainActivity mainActivity = (MainActivity) getActivity();
+            if (mainActivity != null) {
+                // It now only happens in MainActivity if the registration actually works.
+                mainActivity.register_restaurant();
+            }
         });
-
         return view;
-    }
+        }
 }

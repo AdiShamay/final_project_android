@@ -18,24 +18,27 @@
             android:layout_marginBottom="20dp" />
 
         <EditText
+            android:id="@+id/res_name_reg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Restaurant Name" />
 
         <EditText
-            android:id="@+id/et_rest_email"
+            android:id="@+id/et_rest_email_reg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Email Address"
             android:inputType="textEmailAddress" />
 
         <EditText
+            android:id="@+id/res_id_reg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Business ID / Tax Number"
             android:inputType="number" />
 
         <EditText
+            android:id="@+id/res_address_reg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Full Address" />
@@ -54,6 +57,7 @@
             android:backgroundTint="#808080" />
 
         <EditText
+            android:id="@+id/res_password_reg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Password"

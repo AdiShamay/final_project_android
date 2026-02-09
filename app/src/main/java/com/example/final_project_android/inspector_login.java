@@ -41,7 +41,6 @@ public class inspector_login extends Fragment {
         btnLogin.setOnClickListener(v -> {
             MainActivity mainActivity = (MainActivity) getActivity();
             if (mainActivity != null) {
-                // We only call the function. The MainActivity handles the navigation
                 mainActivity.login_inspector();
             }
         });
