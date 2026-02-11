@@ -38,6 +38,13 @@ public class restaurant_login extends Fragment {
                 mainActivity.login_restaurant();
             }
         });
+        //the Return button
+        Button btnReturn = view.findViewById(R.id.btn_RES_login_return_to_home);
+        btnReturn.setOnClickListener(v -> {
+            getParentFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new home())
+                    .commit();
+        });
         return view;
     }
 }

@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -38,6 +40,13 @@ public class customer_feed extends Fragment {
         // Attach the adapter to the RecyclerView
         rvRestaurants.setAdapter(adapter);
 
+        //the Return button
+        Button btnReturn = view.findViewById(R.id.btn_CustomerFeed_return_to_home);
+        btnReturn.setOnClickListener(v -> {
+            getParentFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new home())
+                    .commit();
+        });
         return view;
     }
 }

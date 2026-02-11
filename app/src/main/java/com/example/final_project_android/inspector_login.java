@@ -44,6 +44,17 @@ public class inspector_login extends Fragment {
                 mainActivity.login_inspector();
             }
         });
+        //the Return button
+        Button btnReturn = view.findViewById(R.id.btn_INS_login_return_to_home);
+        btnReturn.setOnClickListener(v -> {
+            getParentFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new home())
+                    .commit();
+        });
+
+
+
+
 
         return view;
     }

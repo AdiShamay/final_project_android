@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,7 +39,6 @@ public class restaurant_reviews extends Fragment {
 
         // Attach the adapter to the RecyclerView
         rvReviews.setAdapter(adapter);
-
         return view;
     }
 }
