@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+import android.widget.ImageButton;
 
 /**
  * Handles the registration form for new Inspectors.
@@ -28,6 +30,11 @@ public class inspector_register extends Fragment {
                 mainActivity.register_inspector();
             }
         });
+
+        // Initialize the back button to return to the Inspector Login screen
+        ImageButton btnReturn = view.findViewById(R.id.btn_return);
+        btnReturn.setOnClickListener(v -> Navigation.findNavController(v).popBackStack());
+
         return view;
     }
 }

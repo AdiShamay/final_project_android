@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 /**
  * Main fragment that directs users to Restaurant, Inspector, or Customer pages.
@@ -19,26 +20,25 @@ public class home extends Fragment {
 
         // Find the buttons in the layout
         Button btnRestaurant = view.findViewById(R.id.btn_restaurant);
-        Button btnInspector = view.findViewById(R.id.btn_inspector); // Changed from btn_critic
+        Button btnInspector = view.findViewById(R.id.btn_inspector);
         Button btnCustomer = view.findViewById(R.id.btn_customer);
 
-        // Set listener to navigate to Restaurant Login
-        btnRestaurant.setOnClickListener(v -> navigateTo(new restaurant_login()));
+        // Navigate to Restaurant Login using the specific NavGraph action ID
+        btnRestaurant.setOnClickListener(v ->
+                Navigation.findNavController(v).navigate(R.id.action_home2_to_restaurant_login)
+        );
 
-        // Set listener to navigate to Inspector Login
-        btnInspector.setOnClickListener(v -> navigateTo(new inspector_login()));
+        // Navigate to Inspector Login using the specific NavGraph action ID
+        btnInspector.setOnClickListener(v ->
+                Navigation.findNavController(v).navigate(R.id.action_home2_to_inspector_login)
+        );
 
-        // Set listener to navigate to Customer Feed (Grades view)
-        btnCustomer.setOnClickListener(v -> navigateTo(new customer_feed()));
+        // Navigate to Customer Feed using the specific NavGraph action ID
+        btnCustomer.setOnClickListener(v ->
+                Navigation.findNavController(v).navigate(R.id.action_home2_to_customer_feed2)
+        );
 
         return view;
     }
-
-    // Helper method to switch fragments and add to back stack
-    private void navigateTo(Fragment fragment) {
-        getParentFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, fragment)
-                .addToBackStack(null)
-                .commit();
-    }
+    
 }

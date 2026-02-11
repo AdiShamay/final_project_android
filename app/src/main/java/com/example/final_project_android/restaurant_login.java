@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+import android.widget.ImageButton;
 
 /**
  * Handles the login process for Restaurant Owners.
@@ -24,10 +26,8 @@ public class restaurant_login extends Fragment {
 
         // Navigate to registration when text is clicked
         tvRegister.setOnClickListener(v -> {
-            getParentFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new restaurant_register())
-                    .addToBackStack(null)
-                    .commit();
+            // Navigate to registration using the NavGraph action
+            Navigation.findNavController(v).navigate(R.id.action_restaurant_login_to_restaurant_register2);
         });
 
         // Find the Login button
@@ -38,13 +38,12 @@ public class restaurant_login extends Fragment {
                 mainActivity.login_restaurant();
             }
         });
+
         //the Return button
-        Button btnReturn = view.findViewById(R.id.btn_RES_login_return_to_home);
-        btnReturn.setOnClickListener(v -> {
-            getParentFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new home())
-                    .commit();
-        });
+        // Initialize the professional back button and use popBackStack
+        ImageButton btnReturn = view.findViewById(R.id.btn_return);
+        btnReturn.setOnClickListener(v -> Navigation.findNavController(v).popBackStack());
+
         return view;
     }
 }

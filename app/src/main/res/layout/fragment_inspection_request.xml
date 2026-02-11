@@ -3,50 +3,74 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="20dp"
-    android:gravity="center_horizontal">
+    android:padding="20dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Inspection Status"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="20dp" />
-
-    <ImageView
-        android:id="@+id/iv_status_icon"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:src="@android:drawable/ic_secure"
-        app:tint="#757575"
-        android:layout_marginBottom="20dp"/>
-
-    <TextView
-        android:id="@+id/tv_request_status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Status: Checking..."
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="10dp" />
-
-    <TextView
-        android:id="@+id/tv_eligibility_message"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Checking eligibility..."
-        android:textSize="16sp"
-        android:textAlignment="center"
-        android:textColor="#666666"
-        android:layout_marginBottom="30dp" />
+        android:layout_marginBottom="24dp">
 
-    <Button
-        android:id="@+id/btn_action_request"
+        <ImageButton
+            android:id="@+id/btn_return"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/baseline_arrow_back_24"
+            android:contentDescription="Back"
+            app:tint="@color/black" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="Inspection Status"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Request Inspection"
-        android:backgroundTint="#4CAF50"
-        android:enabled="false" />
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <ImageView
+            android:id="@+id/iv_status_icon"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@android:drawable/ic_secure"
+            app:tint="#757575"
+            android:layout_marginBottom="20dp"/>
+
+        <TextView
+            android:id="@+id/tv_request_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Status: Checking..."
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="10dp" />
+
+        <TextView
+            android:id="@+id/tv_eligibility_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Checking eligibility..."
+            android:textSize="16sp"
+            android:textAlignment="center"
+            android:textColor="#666666"
+            android:layout_marginBottom="30dp" />
+
+        <Button
+            android:id="@+id/btn_action_request"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Request Inspection"
+            android:backgroundTint="#4CAF50"
+            android:enabled="false" />
+    </LinearLayout>
 
 </LinearLayout>

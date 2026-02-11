@@ -9,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+import android.widget.ImageButton;
 
 /**
  * Handles inspection requests logic.
@@ -63,6 +65,13 @@ public class inspection_request extends Fragment {
                 }
             });
         }
+
+        // Initialize the professional back button
+        ImageButton btnReturn = view.findViewById(R.id.btn_return);
+        btnReturn.setOnClickListener(v -> {
+            // Navigate back to the Dashboard
+            Navigation.findNavController(v).popBackStack();
+        });
 
         return view;
     }

@@ -1,26 +1,52 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp">
 
-    <TextView
-        android:id="@+id/tv_page_title"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Inspection History"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="8dp" />
+        android:layout_marginBottom="16dp">
 
-    <TextView
-        android:id="@+id/tv_specific_restaurant_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Restaurant Name Here"
-        android:textSize="18sp"
-        android:textColor="#555555"
-        android:layout_marginBottom="16dp" />
+        <ImageButton
+            android:id="@+id/btn_return"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/baseline_arrow_back_24"
+            android:contentDescription="Back"
+            app:tint="@color/black" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_page_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Inspection History"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_gravity="center_horizontal" />
+
+            <TextView
+                android:id="@+id/tv_specific_restaurant_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Restaurant Name Here"
+                android:textSize="14sp"
+                android:textColor="#555555"
+                android:layout_gravity="center_horizontal" />
+        </LinearLayout>
+
+    </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_reviews_history"

@@ -11,6 +11,8 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.navigation.Navigation;
+import android.widget.ImageButton;
 
 public class inspector_schedule extends Fragment {
 
@@ -24,8 +26,6 @@ public class inspector_schedule extends Fragment {
         RecyclerView rvList = view.findViewById(R.id.rv_schedule_list);
         CalendarView cvCalendar = view.findViewById(R.id.cv_schedule_calendar);
 
-        // --- התיקון נמצא כאן ---
-        // שינינו מ-FloatingActionButton ל-Button רגיל כדי להתאים ל-XML
         Button fabAdd = view.findViewById(R.id.fab_add_schedule);
 
         // Setup dummy list
@@ -57,6 +57,13 @@ public class inspector_schedule extends Fragment {
         // Add Button Logic
         fabAdd.setOnClickListener(v -> {
             Toast.makeText(getActivity(), "Open Add Schedule Dialog", Toast.LENGTH_SHORT).show();
+        });
+
+        // Initialize the professional back button
+        ImageButton btnReturn = view.findViewById(R.id.btn_return);
+        btnReturn.setOnClickListener(v -> {
+            // Navigate back to the Inspector Dashboard
+            Navigation.findNavController(v).popBackStack();
         });
 
         return view;

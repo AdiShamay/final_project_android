@@ -14,6 +14,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import androidx.navigation.Navigation;
+import android.widget.ImageButton;
 
 /**
  * Handles the login process for Inspectors.
@@ -29,10 +31,8 @@ public class inspector_login extends Fragment {
         // Register Link
         TextView tvRegister = view.findViewById(R.id.tv_go_to_inspector_register);
         tvRegister.setOnClickListener(v -> {
-            getParentFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new inspector_register())
-                    .addToBackStack(null)
-                    .commit();
+            // Navigate to inspector registration using the NavGraph action
+            Navigation.findNavController(v).navigate(R.id.action_inspector_login_to_inspector_register);
         });
 
         // Login Button Logic
@@ -44,13 +44,11 @@ public class inspector_login extends Fragment {
                 mainActivity.login_inspector();
             }
         });
+
         //the Return button
-        Button btnReturn = view.findViewById(R.id.btn_INS_login_return_to_home);
-        btnReturn.setOnClickListener(v -> {
-            getParentFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new home())
-                    .commit();
-        });
+        // Initialize the professional back button and use popBackStack
+        ImageButton btnReturn = view.findViewById(R.id.btn_return);
+        btnReturn.setOnClickListener(v -> Navigation.findNavController(v).popBackStack());
 
 
 

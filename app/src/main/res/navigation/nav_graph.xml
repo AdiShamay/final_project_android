@@ -2,26 +2,159 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/inspector_login">
+    app:startDestination="@id/home2">
 
+    <fragment
+        android:id="@+id/home2"
+        android:name="com.example.final_project_android.home"
+        android:label="home" >
+        <action
+            android:id="@+id/action_home2_to_restaurant_login"
+            app:destination="@id/restaurant_login" />
+        <action
+            android:id="@+id/action_home2_to_inspector_login"
+            app:destination="@id/inspector_login" />
+        <action
+            android:id="@+id/action_home2_to_customer_feed2"
+            app:destination="@id/customer_feed2" />
+    </fragment>
+    <fragment
+        android:id="@+id/restaurant_login"
+        android:name="com.example.final_project_android.restaurant_login"
+        android:label="restaurant_login" >
+        <action
+            android:id="@+id/action_restaurant_login_to_restaurant_register2"
+            app:destination="@id/restaurant_register2" />
+        <action
+            android:id="@+id/action_restaurant_login_to_restaurant_dashboard2"
+            app:destination="@id/restaurant_dashboard2" />
+    </fragment>
     <fragment
         android:id="@+id/inspector_login"
         android:name="com.example.final_project_android.inspector_login"
         android:label="inspector_login" >
         <action
-            android:id="@+id/action_inspector_login_to_inspector_dashboard"
-            app:destination="@id/inspector_dashboard" />
+            android:id="@+id/action_inspector_login_to_inspector_register"
+            app:destination="@id/inspector_register" />
+        <action
+            android:id="@+id/action_inspector_login_to_inspector_dashboard2"
+            app:destination="@id/inspector_dashboard2" />
     </fragment>
     <fragment
         android:id="@+id/inspector_register"
         android:name="com.example.final_project_android.inspector_register"
         android:label="inspector_register" >
         <action
-            android:id="@+id/action_inspector_register_to_inspector_login"
+            android:id="@+id/action_inspector_register_to_inspector_login2"
             app:destination="@id/inspector_login" />
     </fragment>
     <fragment
-        android:id="@+id/inspector_dashboard"
+        android:id="@+id/restaurant_register2"
+        android:name="com.example.final_project_android.restaurant_register"
+        android:label="restaurant_register" >
+        <action
+            android:id="@+id/action_restaurant_register2_to_restaurant_login"
+            app:destination="@id/restaurant_login" />
+    </fragment>
+    <fragment
+        android:id="@+id/inspector_dashboard2"
         android:name="com.example.final_project_android.inspector_dashboard"
-        android:label="inspector_dashboard" />
+        android:label="inspector_dashboard" >
+        <action
+            android:id="@+id/action_inspector_dashboard2_to_notifications2"
+            app:destination="@id/notifications2" />
+        <action
+            android:id="@+id/action_inspector_dashboard2_to_inspector_schedule2"
+            app:destination="@id/inspector_schedule2" />
+        <action
+            android:id="@+id/action_inspector_dashboard2_to_new_inspection_form2"
+            app:destination="@id/new_inspection_form2" />
+        <action
+            android:id="@+id/action_inspector_dashboard2_to_edit_inspector_profile2"
+            app:destination="@id/edit_inspector_profile2" />
+        <action
+            android:id="@+id/action_inspector_dashboard2_to_customer_feed2"
+            app:destination="@id/customer_feed2" />
+        <action
+            android:id="@+id/action_inspector_dashboard2_to_restaurant_reviews2"
+            app:destination="@id/restaurant_reviews2" />
+        <action
+            android:id="@+id/action_inspector_dashboard2_to_home2"
+            app:destination="@id/home2" />
+    </fragment>
+    <fragment
+        android:id="@+id/restaurant_dashboard2"
+        android:name="com.example.final_project_android.restaurant_dashboard"
+        android:label="restaurant_dashboard" >
+        <action
+            android:id="@+id/action_restaurant_dashboard2_to_notifications2"
+            app:destination="@id/notifications2" />
+        <action
+            android:id="@+id/action_restaurant_dashboard2_to_restaurant_reviews2"
+            app:destination="@id/restaurant_reviews2" />
+        <action
+            android:id="@+id/action_restaurant_dashboard2_to_inspection_request2"
+            app:destination="@id/inspection_request2" />
+        <action
+            android:id="@+id/action_restaurant_dashboard2_to_edit_restaurant_profile2"
+            app:destination="@id/edit_restaurant_profile2" />
+        <action
+            android:id="@+id/action_restaurant_dashboard2_to_inspection_request22"
+            app:destination="@id/inspection_request2" />
+        <action
+            android:id="@+id/action_restaurant_dashboard2_to_home2"
+            app:destination="@id/home2" />
+    </fragment>
+    <fragment
+        android:id="@+id/customer_feed2"
+        android:name="com.example.final_project_android.customer_feed"
+        android:label="customer_feed" >
+        <action
+            android:id="@+id/action_customer_feed2_to_restaurant_reviews2"
+            app:destination="@id/restaurant_reviews2" />
+    </fragment>
+    <fragment
+        android:id="@+id/edit_restaurant_profile2"
+        android:name="com.example.final_project_android.edit_restaurant_profile"
+        android:label="edit_restaurant_profile" />
+    <fragment
+        android:id="@+id/restaurant_reviews2"
+        android:name="com.example.final_project_android.restaurant_reviews"
+        android:label="restaurant_reviews" >
+        <action
+            android:id="@+id/action_restaurant_reviews2_to_review_details2"
+            app:destination="@id/review_details2" />
+    </fragment>
+    <fragment
+        android:id="@+id/inspection_request2"
+        android:name="com.example.final_project_android.inspection_request"
+        android:label="inspection_request" />
+    <fragment
+        android:id="@+id/notifications2"
+        android:name="com.example.final_project_android.notifications"
+        android:label="notifications" >
+        <action
+            android:id="@+id/action_notifications2_to_notification_details2"
+            app:destination="@id/notification_details2" />
+    </fragment>
+    <fragment
+        android:id="@+id/edit_inspector_profile2"
+        android:name="com.example.final_project_android.edit_inspector_profile"
+        android:label="edit_inspector_profile" />
+    <fragment
+        android:id="@+id/new_inspection_form2"
+        android:name="com.example.final_project_android.new_inspection_form"
+        android:label="new_inspection_form" />
+    <fragment
+        android:id="@+id/inspector_schedule2"
+        android:name="com.example.final_project_android.inspector_schedule"
+        android:label="inspector_schedule" />
+    <fragment
+        android:id="@+id/review_details2"
+        android:name="com.example.final_project_android.review_details"
+        android:label="review_details" />
+    <fragment
+        android:id="@+id/notification_details2"
+        android:name="com.example.final_project_android.notification_details"
+        android:label="notification_details" />
 </navigation>

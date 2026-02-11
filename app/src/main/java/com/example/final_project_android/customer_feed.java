@@ -5,10 +5,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.navigation.Navigation;
 
 /**
  * Fragment that displays the list of restaurants using the RestaurantAdapter.
@@ -29,23 +31,19 @@ public class customer_feed extends Fragment {
 
         // Create the adapter and define the click behavior
         RestaurantAdapter adapter = new RestaurantAdapter(restaurantName -> {
-
-            // Navigate to the reviews history page when a card is clicked
-            getParentFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new restaurant_reviews())
-                    .addToBackStack(null) // Allow user to navigate back
-                    .commit();
+            // Navigate to the reviews page using the ID from nav_graph
+            Navigation.findNavController(view).navigate(R.id.action_customer_feed2_to_restaurant_reviews2);
         });
 
         // Attach the adapter to the RecyclerView
         rvRestaurants.setAdapter(adapter);
 
         //the Return button
-        Button btnReturn = view.findViewById(R.id.btn_CustomerFeed_return_to_home);
+        // Use ImageButton with the consistent ID btn_return
+        ImageButton btnReturn = view.findViewById(R.id.btn_return);
         btnReturn.setOnClickListener(v -> {
-            getParentFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new home())
-                    .commit();
+            // Navigate back to the previous screen in the stack (Home)
+            Navigation.findNavController(v).popBackStack();
         });
         return view;
     }

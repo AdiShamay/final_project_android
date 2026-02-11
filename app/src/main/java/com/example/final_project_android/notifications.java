@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.navigation.Navigation;
+import android.widget.ImageButton;
 
 /**
  * Fragment displaying list of notifications.
@@ -21,16 +23,20 @@ public class notifications extends Fragment {
         RecyclerView rvNotifications = view.findViewById(R.id.rv_notifications_list);
         rvNotifications.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        // Create adapter with click listener
+        // Create adapter with NavGraph click listener
         NotificationsAdapter adapter = new NotificationsAdapter(() -> {
-            // Navigate to detailed view
-            getParentFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new notification_details())
-                    .addToBackStack(null)
-                    .commit();
+            // Navigate to notification details using the NavGraph action
+            Navigation.findNavController(view).navigate(R.id.action_notifications2_to_notification_details2);
         });
 
         rvNotifications.setAdapter(adapter);
+
+        // Initialize the professional back button
+        ImageButton btnReturn = view.findViewById(R.id.btn_return);
+        btnReturn.setOnClickListener(v -> {
+            // Navigate back to the Dashboard
+            Navigation.findNavController(v).popBackStack();
+        });
 
         return view;
     }

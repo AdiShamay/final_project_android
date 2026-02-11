@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+import android.widget.ImageButton;
 
 /**
  * Fragment for registering a new restaurant.
@@ -29,6 +31,11 @@ public class restaurant_register extends Fragment {
                 mainActivity.register_restaurant();
             }
         });
+
+        // Set up the back button to navigate to the previous screen (Login)
+        ImageButton btnReturn = view.findViewById(R.id.btn_return);
+        btnReturn.setOnClickListener(v -> Navigation.findNavController(v).popBackStack());
+
         return view;
         }
 }

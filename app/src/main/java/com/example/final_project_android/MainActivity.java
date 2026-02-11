@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import androidx.navigation.Navigation;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -48,12 +49,6 @@ public class MainActivity extends AppCompatActivity {
         inspectorsRef = database.getReference("inspectors");
         restaurantsRef = database.getReference("restaurants");
 
-        // Load the home page by default when opening the app
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new home())
-                    .commit();
-        }
     }
 
     public void login_inspector() {
@@ -78,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
                                         if (snapshot.exists()) {
                                             // An inspector with this email was found - successful login
                                             Toast.makeText(MainActivity.this, "Inspector Login Successful", Toast.LENGTH_SHORT).show();
-                                            navigateTo(new inspector_dashboard());
+                                            navigateTo(R.id.action_inspector_login_to_inspector_dashboard2);
                                         } else {
                                             // The user exists in Auth but is not a supervisor (probably a restaurant)
                                             mAuth.signOut(); // We will disconnect it immediately
@@ -141,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
                                     writeToDBInspector(name, email, company, id, license);
                                     Toast.makeText(MainActivity.this, "Registration Successful!", Toast.LENGTH_SHORT).show();
                                     //Calling the navigateTo function
-                                    navigateTo(new inspector_login());
+                                    navigateTo(R.id.action_inspector_register_to_inspector_login2);
                                 } else {
                                     Toast.makeText(MainActivity.this, "Auth Failed: " + authTask.getException().getMessage(), Toast.LENGTH_LONG).show();
                                 }
@@ -181,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
                                         if (snapshot.exists()) {
                                             // A restaurant with this email address was found.
                                             Toast.makeText(MainActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
-                                            navigateTo(new restaurant_dashboard());
+                                            navigateTo(R.id.action_restaurant_login_to_restaurant_dashboard2);
                                         } else {
                                             // The user has been authenticated with Auth but does not appear in the restaurant table
                                             mAuth.signOut();
@@ -243,7 +238,7 @@ public class MainActivity extends AppCompatActivity {
                                     Toast.makeText(this, "Success!", Toast.LENGTH_SHORT).show();
 
                                     // go back to login view
-                                    navigateTo(new restaurant_login());
+                                    navigateTo(R.id.action_restaurant_register2_to_restaurant_login);
                                 } else {
                                     Toast.makeText(this, "Failed: " + authTask.getException().getMessage(), Toast.LENGTH_LONG).show();
                                 }
@@ -261,11 +256,8 @@ public class MainActivity extends AppCompatActivity {
         myRef.setValue(restaurants);
     }
 
-    public void navigateTo(Fragment fragment) {
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, fragment)
-                .addToBackStack(null)
-                .commit();
+    public void navigateTo(int actionId) {
+        Navigation.findNavController(this, R.id.nav_host_fragment).navigate(actionId);
     }
 
     // Login Error handling function

@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 /**
  * Main Dashboard logic linking to management pages.
@@ -21,47 +22,36 @@ public class restaurant_dashboard extends Fragment {
         Button btnRequestNew = view.findViewById(R.id.btn_request_inspection);
         Button btnHistory = view.findViewById(R.id.btn_view_my_history);
         Button btnEdit = view.findViewById(R.id.btn_edit_details);
-
-        // Logout
-        btnLogout.setOnClickListener(v -> {
-            getParentFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new home())
-                    .commit();
-        });
-
-        // Request Inspection (Opens the new page)
-        btnRequestNew.setOnClickListener(v -> {
-            getParentFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new inspection_request())
-                    .addToBackStack(null)
-                    .commit();
-        });
-
-        // History (Reuses the existing list page - LOGIC APPROVED)
-        btnHistory.setOnClickListener(v -> {
-            getParentFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new restaurant_reviews())
-                    .addToBackStack(null)
-                    .commit();
-        });
-
-        // Edit Profile (Opens the new page)
-        btnEdit.setOnClickListener(v -> {
-            getParentFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new edit_restaurant_profile())
-                    .addToBackStack(null)
-                    .commit();
-        });
-
-        // Find the notifications button
         Button btnNotif = view.findViewById(R.id.btn_notifications);
 
-        // Set Click Listener to open the new Notifications Fragment
+        // Logout and return to home screen
+        btnLogout.setOnClickListener(v -> {
+            Navigation.findNavController(v)
+                    .navigate(R.id.action_restaurant_dashboard2_to_home2);
+        });
+
+        // Request Inspection
+        btnRequestNew.setOnClickListener(v -> {
+            Navigation.findNavController(v)
+                    .navigate(R.id.action_restaurant_dashboard2_to_inspection_request2);
+        });
+
+        // View History
+        btnHistory.setOnClickListener(v -> {
+            Navigation.findNavController(v)
+                    .navigate(R.id.action_restaurant_dashboard2_to_restaurant_reviews2);
+        });
+
+        // Edit Profile
+        btnEdit.setOnClickListener(v -> {
+            Navigation.findNavController(v)
+                    .navigate(R.id.action_restaurant_dashboard2_to_edit_restaurant_profile2);
+        });
+
+        // Notifications
         btnNotif.setOnClickListener(v -> {
-            getParentFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new notifications())
-                    .addToBackStack(null)
-                    .commit();
+            Navigation.findNavController(v)
+                    .navigate(R.id.action_restaurant_dashboard2_to_notifications2);
         });
 
         return view;

@@ -9,6 +9,8 @@ import android.widget.Button;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.navigation.Navigation;
+import android.widget.ImageButton;
 
 /**
  * Fragment showing the inspection history list.
@@ -30,15 +32,17 @@ public class restaurant_reviews extends Fragment {
         // Create the adapter and define the click behavior
         ReviewsAdapter adapter = new ReviewsAdapter(() -> {
 
-            // Navigate to the detailed review page when a row is clicked
-            getParentFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new review_details())
-                    .addToBackStack(null) // Allow user to navigate back
-                    .commit();
+            // Navigate to review details using the action defined in your NavGraph
+            Navigation.findNavController(view).navigate(R.id.action_restaurant_reviews2_to_review_details2);
         });
 
         // Attach the adapter to the RecyclerView
         rvReviews.setAdapter(adapter);
+
+        // Initialize the back button and set it to pop the fragment back stack
+        ImageButton btnReturn = view.findViewById(R.id.btn_return);
+        btnReturn.setOnClickListener(v -> Navigation.findNavController(v).popBackStack());
+
         return view;
     }
 }

@@ -1,55 +1,71 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center"
     android:padding="20dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Inspector Login"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="24dp" />
-
-    <EditText
-        android:id="@+id/et_inspector_email_login"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Please enter your Email"
-        android:inputType="text" />
+        android:layout_marginBottom="24dp">
 
-    <EditText
-        android:id="@+id/password_insp_login"
+        <ImageButton
+            android:id="@+id/btn_return"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/baseline_arrow_back_24"
+            android:contentDescription="Back"
+            app:tint="@color/black" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="Inspector Login"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Please eneter your Password"
-        android:inputType="textPassword" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center">
 
-    <Button
-        android:id="@+id/btn_login"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Login"
-        android:layout_marginTop="16dp" />
+        <EditText
+            android:id="@+id/et_inspector_email_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Please enter your Email"
+            android:inputType="text" />
 
-    <TextView
-        android:id="@+id/tv_go_to_inspector_register"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Inspector? Register here"
-        android:textColor="#0000FF"
-        android:textStyle="bold"
-        android:layout_marginTop="24dp" />
+        <EditText
+            android:id="@+id/password_insp_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Please enter your Password"
+            android:inputType="textPassword" />
 
-    <Button
-        android:id="@+id/btn_INS_login_return_to_home"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:insetTop="4dp"
-        android:insetBottom="4dp"
-        android:text="Return"
-        android:layout_marginTop="20dp"/>
+        <Button
+            android:id="@+id/btn_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Login"
+            android:layout_marginTop="16dp" />
+
+        <TextView
+            android:id="@+id/tv_go_to_inspector_register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New Inspector? Register here"
+            android:textColor="#0000FF"
+            android:textStyle="bold"
+            android:layout_marginTop="24dp" />
+    </LinearLayout>
 
 </LinearLayout>

@@ -122,8 +122,16 @@
             android:id="@+id/btn_inspector_edit_profile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
             android:backgroundTint="#555555"
             android:text="Edit My Profile" />
+
+        <Button
+            android:id="@+id/btn_view_all_reviews"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#FF9800"
+            android:text="View Inspections" />
 
     </LinearLayout>
 </LinearLayout>
