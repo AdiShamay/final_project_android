@@ -1,6 +1,6 @@
 package com.example.final_project_android;
 
-public class inspector_class {
+public class Inspector_class {
 
     private  String Full_name;
 
@@ -14,9 +14,9 @@ public class inspector_class {
 
     private  String Password;
 
-    public inspector_class(){}
+    public Inspector_class(){}
 
-    public inspector_class(String full_name, String email, String company_name, String ID, String licence_number, String password) {
+    public Inspector_class(String full_name, String email, String company_name, String ID, String licence_number, String password) {
         Full_name = full_name;
         Email = email;
         Company_name = company_name;

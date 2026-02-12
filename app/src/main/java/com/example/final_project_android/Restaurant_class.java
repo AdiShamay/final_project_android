@@ -10,7 +10,7 @@ public class Restaurant_class {
 
     private String address;
 
-    private  String password;
+    private String password;
 
     private String health_score;
 

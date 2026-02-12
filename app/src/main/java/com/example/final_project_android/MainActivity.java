@@ -1,25 +1,13 @@
 package com.example.final_project_android;
 
-import static android.content.ContentValues.TAG;
-
-import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import androidx.navigation.Navigation;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
@@ -28,8 +16,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -150,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void writeToDBInspector(String name, String email, String company, String id, String license) {
         DatabaseReference myRef = database.getReference("inspectors").child(String.valueOf(id));
-        inspector_class inspector = new inspector_class(name, email, company, id, license, "");
+        Inspector_class inspector = new Inspector_class(name, email, company, id, license, "");
         myRef.setValue(inspector);
     }
 
