@@ -46,13 +46,12 @@ public class inspector_login extends Fragment {
         });
 
         //the Return button
-        // Initialize the professional back button and use popBackStack
         ImageButton btnReturn = view.findViewById(R.id.btn_return);
-        btnReturn.setOnClickListener(v -> Navigation.findNavController(v).popBackStack());
 
-
-
-
+        btnReturn.setOnClickListener(v -> {
+            // Navigates directly to the Home fragment
+            Navigation.findNavController(v).navigate(R.id.action_inspector_login_to_home2);
+        });
 
         return view;
     }
