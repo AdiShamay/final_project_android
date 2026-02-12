@@ -6,28 +6,64 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
-/**
- * Adapter for the Customer Feed list.
- * It binds the restaurant data to the card view.
- */
 public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.ViewHolder> {
 
-    // Interface to handle clicks
     public interface OnItemClickListener {
         void onItemClick(String restaurantName);
     }
 
     private final OnItemClickListener listener;
 
+    // שתי הרשימות - אחת למקור ואחת לתצוגה המסוננת
+    private List<Restaurant_class> allRestaurants = new ArrayList<>();
+    private List<Restaurant_class> filteredList = new ArrayList<>();
+
     public RestaurantAdapter(OnItemClickListener listener) {
         this.listener = listener;
     }
 
+    // פונקציה חדשה: לעדכון הרשימה מה-Fragment (למשל אחרי משיכה מ-Firebase)
+    public void setRestaurants(List<Restaurant_class> restaurants) {
+        this.allRestaurants = new ArrayList<>(restaurants);
+        this.filteredList = new ArrayList<>(restaurants);
+        notifyDataSetChanged();
+    }
+
+    // search by name and addres or grade logic
+    public void filter(String query) {
+        // 1. ניקוי הרשימה המוצגת כרגע
+        filteredList.clear();
+
+        // 2. אם החיפוש ריק - מחזירים את כל המסעדות מהמקור
+        if (query.isEmpty()) {
+            filteredList.addAll(allRestaurants);
+        } else {
+            String pattern = query.toLowerCase().trim();
+
+            for (Restaurant_class res : allRestaurants) {
+                // 3. בדיקת "או" (OR) בין שלושת הפרמטרים
+                boolean matchesName = res.getRes_name().toLowerCase().contains(pattern);
+                boolean matchesAddress = res.getAddress().toLowerCase().contains(pattern);
+
+
+                if (matchesName || matchesAddress ) {
+                    filteredList.add(res);
+                }
+            }
+        }
+
+        notifyDataSetChanged();
+    }
+
+
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // Here we connect to the XML of the single card
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_restaurant_card, parent, false);
         return new ViewHolder(view);
@@ -35,23 +71,23 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        // Dummy data for testing (in the future, this will come from MongoDB)
-        holder.tvName.setText("Restaurant " + (position + 1));
-        holder.tvAddress.setText("Herzl St " + (position + 10) + ", Tel Aviv");
-        holder.tvGrade.setText("Grade: A");
 
-        // When a user clicks on the card
+        Restaurant_class restaurant = filteredList.get(position);
+
+        holder.tvName.setText(restaurant.getRes_name());
+        holder.tvAddress.setText(restaurant.getAddress());
+        holder.tvGrade.setText("Grade: ");
+
         holder.itemView.setOnClickListener(v -> {
-            listener.onItemClick("Restaurant " + (position + 1));
+            listener.onItemClick(restaurant.getRes_name());
         });
     }
-
+    //get the size of the list
     @Override
     public int getItemCount() {
-        return 10; // Number of dummy items to show
+        return filteredList.size();
     }
 
-    // Holds the view elements
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvName, tvAddress, tvGrade;
 

@@ -1,3 +1,4 @@
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -26,11 +27,54 @@
         android:textStyle="bold"
         android:textColor="@color/black"/>
 
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/Customer_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_title"
+        android:layout_marginTop="16dp"
+        app:iconifiedByDefault="false"
+        app:queryHint="Search by name or address" />
+
+    <LinearLayout
+        android:id="@+id/layout_sort"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/Customer_search"
+        android:layout_marginTop="10dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="Sort by:"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/btn_sort_grade"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_marginEnd="4dp"
+            android:text="Best Grade"
+            android:textSize="10sp" />
+
+        <Button
+            android:id="@+id/btn_sort_last_inspection"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:text="Last Inspection"
+            android:textSize="10sp" />
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_restaurants"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/btn_return"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="101dp" />
 
 </RelativeLayout>
