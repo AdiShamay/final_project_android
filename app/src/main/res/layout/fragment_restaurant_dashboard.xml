@@ -15,7 +15,7 @@
             android:id="@+id/tv_greeting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hello, Pizza Place"
+            android:text="Hello, Restaurant"
             android:textSize="24sp"
             android:textStyle="bold"
             android:textColor="#333333" />
@@ -54,10 +54,20 @@
                 android:id="@+id/tv_current_grade"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="A"
+                android:text="-"
                 android:textSize="60sp"
                 android:textStyle="bold"
                 android:textColor="#4CAF50" />
+
+            <TextView
+                android:id="@+id/tv_grade_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Last Inspection: --/--/----"
+                android:textSize="14sp"
+                android:textColor="#888888"
+                android:layout_marginTop="4dp"/>
+
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -71,7 +81,7 @@
             android:id="@+id/btn_notifications"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:text="Messages (3 New)"
+            android:text="Messages"
             android:drawableStart="@android:drawable/ic_dialog_email"
             android:backgroundTint="#2196F3" />
     </LinearLayout>

@@ -100,7 +100,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:text="My Future Schedule" />
+            android:text="Schedule" />
 
         <Button
             android:id="@+id/btn_inspector_history"
