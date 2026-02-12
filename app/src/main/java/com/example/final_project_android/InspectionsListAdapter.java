@@ -9,52 +9,44 @@ import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Adapter for the Inspection History list.
- * Binds inspection data to the row layout.
+ * Displays summary data (Date, Inspector, Grade) for past reports.
  */
-public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ViewHolder> {
+public class InspectionsListAdapter extends RecyclerView.Adapter<InspectionsListAdapter.ViewHolder> {
 
-    public interface OnReviewClickListener {
-        void onReviewClick();
-    }
-
+    // Listener for navigating to details screen
+    public interface OnReviewClickListener { void onReviewClick(); }
     private final OnReviewClickListener listener;
 
-    public ReviewsAdapter(OnReviewClickListener listener) {
+    public InspectionsListAdapter(OnReviewClickListener listener) {
         this.listener = listener;
     }
 
-    @NonNull
-    @Override
+    @NonNull @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // Connect to the row XML layout
+        // IMPORTANT: Use a dedicated history layout file to match the IDs below
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_review_row, parent, false);
+                .inflate(R.layout.item_inspection_row, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        // Dummy data
-        holder.tvDate.setText("12/0" + (position + 1) + "/2026");
+        // Temporary dummy data for display
+        holder.tvDate.setText("2026-02-12");
         holder.tvInspector.setText("Inspector: Dana Cohen");
-
-        // Logic to alternate grades just for visuals
-        String grade = (position % 2 == 0) ? "A" : "B";
-        holder.tvGrade.setText(grade);
+        holder.tvGrade.setText(position % 2 == 0 ? "A" : "B");
 
         holder.itemView.setOnClickListener(v -> listener.onReviewClick());
     }
 
-    @Override
-    public int getItemCount() {
-        return 5; // Number of dummy reviews to show
-    }
+    @Override public int getItemCount() { return 5; }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvDate, tvInspector, tvGrade;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            // These IDs must exist inside item_history_row.xml
             tvDate = itemView.findViewById(R.id.tv_row_date);
             tvInspector = itemView.findViewById(R.id.tv_row_inspector);
             tvGrade = itemView.findViewById(R.id.tv_row_grade);

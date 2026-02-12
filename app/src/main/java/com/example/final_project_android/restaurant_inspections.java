@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -16,12 +15,12 @@ import android.widget.ImageButton;
  * Fragment showing the inspection history list.
  * Clicking a row navigates to the detailed review page.
  */
-public class restaurant_reviews extends Fragment {
+public class restaurant_inspections extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_restaurant_reviews, container, false);
+        View view = inflater.inflate(R.layout.fragment_restaurant_inspections, container, false);
 
         // Find the RecyclerView in the layout
         RecyclerView rvReviews = view.findViewById(R.id.rv_reviews_history);
@@ -30,7 +29,7 @@ public class restaurant_reviews extends Fragment {
         rvReviews.setLayoutManager(new LinearLayoutManager(getContext()));
 
         // Create the adapter and define the click behavior
-        ReviewsAdapter adapter = new ReviewsAdapter(() -> {
+        InspectionsListAdapter adapter = new InspectionsListAdapter(() -> {
 
             // Navigate to review details using the action defined in your NavGraph
             Navigation.findNavController(view).navigate(R.id.action_restaurant_reviews2_to_review_details2);

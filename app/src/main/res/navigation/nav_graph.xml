@@ -119,7 +119,7 @@
         android:label="edit_restaurant_profile" />
     <fragment
         android:id="@+id/restaurant_reviews2"
-        android:name="com.example.final_project_android.restaurant_reviews"
+        android:name="com.example.final_project_android.restaurant_inspections"
         android:label="restaurant_reviews" >
         <action
             android:id="@+id/action_restaurant_reviews2_to_review_details2"
@@ -151,7 +151,7 @@
         android:label="inspector_schedule" />
     <fragment
         android:id="@+id/review_details2"
-        android:name="com.example.final_project_android.review_details"
+        android:name="com.example.final_project_android.inspection_details"
         android:label="review_details" />
     <fragment
         android:id="@+id/notification_details2"
