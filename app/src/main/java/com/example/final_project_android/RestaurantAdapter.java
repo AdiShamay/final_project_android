@@ -26,10 +26,22 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
         this.listener = listener;
     }
 
-    // function to update the list from the Fragment after pulling from Firebase
+    // Function to update the list, keeping only restaurants with valid reviews (Grade + Date)
     public void setRestaurants(List<Restaurant_class> restaurants) {
-        this.allRestaurants = new ArrayList<>(restaurants);
-        this.filteredList = new ArrayList<>(restaurants);
+        List<Restaurant_class> ratedRestaurants = new ArrayList<>();
+
+        for (Restaurant_class res : restaurants) {
+            // Check that BOTH Grade and Date exist and are not empty
+            boolean hasGrade = res.getHealth_score() != null && !res.getHealth_score().trim().isEmpty();
+            boolean hasDate = res.getDate() != null && !res.getDate().trim().isEmpty();
+
+            if (hasGrade && hasDate) {
+                ratedRestaurants.add(res);
+            }
+        }
+
+        this.allRestaurants = new ArrayList<>(ratedRestaurants);
+        this.filteredList = new ArrayList<>(ratedRestaurants);
         notifyDataSetChanged();
     }
 
@@ -57,8 +69,6 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
         notifyDataSetChanged();
     }
 
-
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -74,7 +84,22 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
 
         holder.tvName.setText(restaurant.getRes_name());
         holder.tvAddress.setText(restaurant.getAddress());
-        holder.tvGrade.setText("Grade: ");
+
+        // Bind Health Score (Grade) with color logic
+        String grade = restaurant.getHealth_score();
+        holder.tvGrade.setText("Grade: " + grade);
+
+        // Set color based on grade
+        if (grade.equals("A")) {
+            holder.tvGrade.setTextColor(android.graphics.Color.parseColor("#4CAF50")); // Green
+        } else if (grade.equals("B")) {
+            holder.tvGrade.setTextColor(android.graphics.Color.parseColor("#FFC107")); // Orange
+        } else {
+            holder.tvGrade.setTextColor(android.graphics.Color.RED); // Red
+        }
+
+        // Bind Inspection Date
+        holder.tvDate.setText("Last Inspection: " + restaurant.getDate());
 
         holder.itemView.setOnClickListener(v -> {
             listener.onItemClick(restaurant.getRes_name());
@@ -87,13 +112,14 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvName, tvAddress, tvGrade;
+        TextView tvName, tvAddress, tvGrade, tvDate;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvName = itemView.findViewById(R.id.tv_restaurant_name);
             tvAddress = itemView.findViewById(R.id.tv_restaurant_address);
             tvGrade = itemView.findViewById(R.id.tv_sanitation_grade);
+            tvDate = itemView.findViewById(R.id.tv_inspection_date);
         }
     }
 
