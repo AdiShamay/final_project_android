@@ -12,14 +12,20 @@ public class Restaurant_class {
 
     private  String password;
 
+    private String health_score;
+
+    private String date;
+
     public Restaurant_class(){}
 
     public Restaurant_class(String res_name, String email, String business_id, String address, String password) {
         this.res_name = res_name;
-        Email = email;
-        Business_id = business_id;
+        this.Email = email;
+        this.Business_id = business_id;
         this.address = address;
         this.password = password;
+        this.health_score="";// Empty on registration
+        this.date="";// Empty on registration
     }
 
     public String getRes_name() {
@@ -60,5 +66,21 @@ public class Restaurant_class {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getHealth_score() {
+        return health_score;
+    }
+
+    public void setHealth_score(String health_score) {
+        this.health_score = health_score;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }

@@ -143,6 +143,13 @@ public class new_inspection_form extends Fragment {
         DatabaseReference myRef = database.getReference("inspections").child(Report_ID);
         Inspection_Report_class report = new Inspection_Report_class(Report_ID, Business_ID, Inspector_Email, Restaurant_Name, Date, Total_Score, Final_Grade, Items);
         myRef.setValue(report);
+
+        //updating the restaurants DB to the newest grade and date
+        DatabaseReference resRef = database.getReference("restaurants").child(Business_ID);
+        java.util.HashMap<String, Object> updates = new java.util.HashMap<>();
+        updates.put("health_score", Final_Grade);
+        updates.put("date", Date);
+        resRef.updateChildren(updates);
     }
 
     // Helper to update the score text view
