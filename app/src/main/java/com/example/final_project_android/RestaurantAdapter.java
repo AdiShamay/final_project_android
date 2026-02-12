@@ -18,7 +18,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
 
     private final OnItemClickListener listener;
 
-    // שתי הרשימות - אחת למקור ואחת לתצוגה המסוננת
+    //two lists : one for the source and one for the filtered view
     private List<Restaurant_class> allRestaurants = new ArrayList<>();
     private List<Restaurant_class> filteredList = new ArrayList<>();
 
@@ -26,7 +26,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
         this.listener = listener;
     }
 
-    // פונקציה חדשה: לעדכון הרשימה מה-Fragment (למשל אחרי משיכה מ-Firebase)
+    // function to update the list from the Fragment after pulling from Firebase
     public void setRestaurants(List<Restaurant_class> restaurants) {
         this.allRestaurants = new ArrayList<>(restaurants);
         this.filteredList = new ArrayList<>(restaurants);
@@ -35,27 +35,25 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
 
     // search by name and addres or grade logic
     public void filter(String query) {
-        // 1. ניקוי הרשימה המוצגת כרגע
+        //Clearing the currently displayed list
         filteredList.clear();
 
-        // 2. אם החיפוש ריק - מחזירים את כל המסעדות מהמקור
+        // If the search is empty  all restaurants from the source are returned.
         if (query.isEmpty()) {
             filteredList.addAll(allRestaurants);
         } else {
             String pattern = query.toLowerCase().trim();
 
             for (Restaurant_class res : allRestaurants) {
-                // 3. בדיקת "או" (OR) בין שלושת הפרמטרים
+                //Checking for a match between the parameters
                 boolean matchesName = res.getRes_name().toLowerCase().contains(pattern);
                 boolean matchesAddress = res.getAddress().toLowerCase().contains(pattern);
-
 
                 if (matchesName || matchesAddress ) {
                     filteredList.add(res);
                 }
             }
         }
-
         notifyDataSetChanged();
     }
 
