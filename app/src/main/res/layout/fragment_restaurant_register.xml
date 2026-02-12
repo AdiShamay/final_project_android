@@ -61,19 +61,6 @@
             android:layout_height="wrap_content"
             android:hint="Full Address" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Proof of Ownership (License Image):"
-            android:layout_marginTop="15dp" />
-
-        <Button
-            android:id="@+id/btn_upload_license"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Upload Business License"
-            android:backgroundTint="#808080" />
-
         <EditText
             android:id="@+id/res_password_reg"
             android:layout_width="match_parent"
