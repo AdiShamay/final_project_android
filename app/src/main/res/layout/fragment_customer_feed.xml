@@ -61,13 +61,6 @@
             android:text="Best Grade"
             android:textSize="10sp" />
 
-        <Button
-            android:id="@+id/btn_sort_last_inspection"
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="36dp"
-            android:text="Last Inspection"
-            android:textSize="10sp" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView

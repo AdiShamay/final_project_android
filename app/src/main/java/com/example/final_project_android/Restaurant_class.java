@@ -77,7 +77,7 @@ public class Restaurant_class {
     }
 
     public String getDate() {
-        return date;
+        return (date == null) ? "" : date;
     }
 
     public void setDate(String date) {

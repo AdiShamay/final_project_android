@@ -24,6 +24,8 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullUnmarked;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -69,8 +71,33 @@ public class customer_feed extends Fragment {
                         restaurantList.add(restaurant);
                     }
                 }
-                // Update the adapter with the real list that came from the DB
+                //Default Sort: Sort by Date (Newest First)
+                Collections.sort(restaurantList, (r1, r2) -> {
+                    String date1 = (r1.getDate() != null) ? r1.getDate() : "";
+                    String date2 = (r2.getDate() != null) ? r2.getDate() : "";
+
+                    int dateCompare = date2.compareTo(date1); // Descending order
+
+                    // Tie-breaker sub-case: If dates are the same, sort alphabetically by name
+                    if (dateCompare == 0) {
+                        String name1 = (r1.getRes_name() != null) ? r1.getRes_name() : "";
+                        String name2 = (r2.getRes_name() != null) ? r2.getRes_name() : "";
+                        return name1.compareTo(name2);
+                    }
+                    return dateCompare;
+                });
+
+                //Update the adapter with the sorted list
                 adapter.setRestaurants(restaurantList);
+
+                //Activate the "Sort by Grade" button
+                Button btnSortGrade = view.findViewById(R.id.btn_sort_grade);
+                if (btnSortGrade != null) {
+                    btnSortGrade.setOnClickListener(v -> {
+                        // This calls the logic we implemented in the Adapter earlier
+                        adapter.sortByGrade();
+                    });
+                }
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {

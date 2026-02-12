@@ -96,4 +96,29 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
             tvGrade = itemView.findViewById(R.id.tv_sanitation_grade);
         }
     }
+
+    public void sortByGrade() {
+        Collections.sort(allRestaurants, (r1, r2) -> {
+            String s1 = (r1.getHealth_score() != null) ? r1.getHealth_score() : "";
+            String s2 = (r2.getHealth_score() != null) ? r2.getHealth_score() : "";
+
+            // 2. Handle empty scores
+            if (s1.isEmpty() && s2.isEmpty()) return 0;
+            if (s1.isEmpty()) return 1;
+            if (s2.isEmpty()) return -1;
+
+            //Primary Sort: Health Grade (A -> B -> C)
+            int gradeCompare = s1.compareTo(s2);
+
+            // 4. Sub-case Tie-breaker: If grades are the same, sort by Date (Newest first)
+            if (gradeCompare == 0) {
+                String date1 = (r1.getDate() != null) ? r1.getDate() : "";
+                String date2 = (r2.getDate() != null) ? r2.getDate() : "";
+                return date2.compareTo(date1); // Descending date
+            }
+
+            return gradeCompare;
+        });
+        notifyDataSetChanged();
+    }
 }
