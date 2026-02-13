@@ -29,8 +29,8 @@ public class Inspection_Request_class {
         this.requested_date = requested_date;
 
         // Initialize as null since no inspector has been assigned yet
-        this.inspector_id = null;
-        this.inspection_time = null;
+        this.inspector_id = "";
+        this.inspection_time = "";
     }
 
     // --- Getters and Setters ---
