@@ -16,7 +16,7 @@
             android:id="@+id/tv_inspector_greeting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hello, Inspector Cohen"
+            android:text="Hello, Inspector"
             android:textColor="#333333"
             android:textSize="22sp"
             android:textStyle="bold" />
@@ -32,63 +32,86 @@
     </RelativeLayout>
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/card_next_inspection"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
         app:cardBackgroundColor="#E0F7FA"
         app:cardCornerRadius="12dp"
-        app:cardElevation="4dp">
+        app:cardElevation="4dp"
+        android:visibility="gone">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:padding="20dp">
 
-            <TextView
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_toStartOf="@id/btn_start_report_card"
+                android:layout_marginEnd="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:text="Next Scheduled Inspection"
+                    android:textColor="#006064"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_next_restaurant_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Loading..."
+                    android:textColor="#006064"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_next_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="--/--/----, --:--"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tv_next_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Address"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_start_report_card"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:text="Next Scheduled Inspection"
-                android:textColor="#006064"
-                android:textStyle="bold" />
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:text="Start Inspection"
+                android:backgroundTint="#009688"
+                android:textSize="12sp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:padding="12dp"/>
 
-            <TextView
-                android:id="@+id/tv_next_restaurant_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Sushi Place TLV"
-                android:textColor="#006064"
-                android:textSize="24sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tv_next_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="Today, 14:00"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/tv_next_address"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="Rothschild Blvd 10, Tel Aviv"
-                android:textSize="14sp" />
-
-        </LinearLayout>
+        </RelativeLayout>
     </androidx.cardview.widget.CardView>
 
-    <Button
-        android:id="@+id/btn_start_new_inspection"
+    <TextView
+        android:id="@+id/tv_no_inspection"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_marginBottom="16dp"
-        android:backgroundTint="#009688"
-        android:text="Start New Inspection Report"
-        android:textSize="16sp" />
+        android:layout_height="wrap_content"
+        android:text="No upcoming inspections scheduled."
+        android:gravity="center"
+        android:padding="20dp"
+        android:visibility="visible"
+        android:layout_marginBottom="24dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
