@@ -36,6 +36,7 @@ public class inspection_request extends Fragment {
     private ImageView ivIcon;
     private Button btnAction;
     private EditText etDate;
+    private com.google.android.material.textfield.TextInputLayout dateLayout;
 
     // Firebase
     private DatabaseReference dbRef;
@@ -56,9 +57,8 @@ public class inspection_request extends Fragment {
         ivIcon = view.findViewById(R.id.iv_status_icon);
         etDate = view.findViewById(R.id.et_requested_date);
         ImageButton btnReturn = view.findViewById(R.id.btn_return);
-        // Find the Layout to handle icon clicks
-        com.google.android.material.textfield.TextInputLayout dateLayout = view.findViewById(R.id.textInputLayoutDate);
-
+        // Layout to handle icon clicks
+        dateLayout = view.findViewById(R.id.textInputLayoutDate);
         // Initialize Firebase
         dbRef = FirebaseDatabase.getInstance().getReference();
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
@@ -187,6 +187,7 @@ public class inspection_request extends Fragment {
             // Lock input fields and action button while a request is active
             etDate.setText(activeRequest.getRequested_date());
             etDate.setEnabled(false);
+            if (dateLayout != null) dateLayout.setEndIconOnClickListener(null);
             btnAction.setText("Request Sent");
             btnAction.setEnabled(false);
             btnAction.setBackgroundColor(0xFFB0BEC5); // Neutral gray
@@ -244,6 +245,7 @@ public class inspection_request extends Fragment {
         tvMessage.setText("4 months required between inspections.\nYou can request a new inspection starting from: " + availableDate);
 
         etDate.setEnabled(false);
+        if (dateLayout != null) dateLayout.setEndIconOnClickListener(null);
         etDate.setText("");
         btnAction.setEnabled(false);
         btnAction.setText("Not Available Yet");
@@ -258,6 +260,7 @@ public class inspection_request extends Fragment {
         tvMessage.setText("Please select a date (starting from tomorrow)");
 
         etDate.setEnabled(true);
+        if (dateLayout != null) dateLayout.setEndIconOnClickListener(v -> etDate.performClick());
         etDate.setText("");
         btnAction.setEnabled(true);
         btnAction.setText("Submit Request");

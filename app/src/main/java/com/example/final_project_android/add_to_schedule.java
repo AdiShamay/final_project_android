@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.SearchView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -18,8 +19,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class add_to_schedule extends Fragment {
 
@@ -31,22 +37,46 @@ public class add_to_schedule extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_to_schedule, container, false);
 
-        // Initialize UI components
         recyclerView = view.findViewById(R.id.rv_available_requests);
         ImageButton btnReturn = view.findViewById(R.id.btn_return);
+        SearchView searchView = view.findViewById(R.id.sv_requests_search);
 
+        // Initialize list
         availableList = new ArrayList<>();
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        // Setup the adapter with a listener for the "Accept" button
+        // Setup adapter with Time Validation Logic
         adapter = new AvailableRequestsAdapter(availableList, (request, time) -> {
+            // Check if the selected time is valid (only if date is today)
+            if (!isValidFutureTime(request.getRequested_date(), time)) {
+                Toast.makeText(getContext(), "For today's inspection, please select a future time", Toast.LENGTH_LONG).show();
+                return; // Stop execution, do not send to Firebase
+            }
+
+            // If time is valid, proceed to assign
             assignInspectorToRequest(request, time);
         });
         recyclerView.setAdapter(adapter);
 
+        // Load Data
         loadOpenRequestsFromFirebase();
 
-        // Handle return button click to navigate back
+        // Setup Search Listener
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                adapter.filter(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapter.filter(newText);
+                return false;
+            }
+        });
+
+        // Return Button
         btnReturn.setOnClickListener(v -> {
             Navigation.findNavController(v).popBackStack();
         });
@@ -54,25 +84,37 @@ public class add_to_schedule extends Fragment {
         return view;
     }
 
-    /**
-     * Fetches requests from Firebase where no inspector has been assigned yet.
-     * It filters for requests where inspector_id is an empty string defined in the class.
-     */
     private void loadOpenRequestsFromFirebase() {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("inspection_requests");
 
-        // Filter: inspector_id must be an empty string ("")
         ref.orderByChild("inspector_id").equalTo("").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                availableList.clear();
+                // Use a temporary list to avoid clearing reference in adapter
+                List<Inspection_Request_class> tempList = new ArrayList<>();
+
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     Inspection_Request_class req = ds.getValue(Inspection_Request_class.class);
                     if (req != null) {
-                        availableList.add(req);
+                        tempList.add(req);
                     }
                 }
-                adapter.notifyDataSetChanged();
+
+                // Sort by date (earliest first)
+                java.util.Collections.sort(tempList, (r1, r2) -> {
+                    try {
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+                        Date d1 = sdf.parse(r1.getRequested_date());
+                        Date d2 = sdf.parse(r2.getRequested_date());
+                        if (d1 != null && d2 != null) return d1.compareTo(d2);
+                        return 0;
+                    } catch (Exception e) { return 0; }
+                });
+
+                // Update adapter with the NEW temp list
+                if (adapter != null) {
+                    adapter.updateList(tempList);
+                }
             }
 
             @Override
@@ -82,23 +124,17 @@ public class add_to_schedule extends Fragment {
         });
     }
 
-    // Assigns the current logged-in inspector to the selected inspection request
     private void assignInspectorToRequest(Inspection_Request_class request, String time) {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         if (currentUser == null) {
-            // This is a rare edge case, keeping generic error
             Toast.makeText(getContext(), "System Error: Please relogin", Toast.LENGTH_SHORT).show();
             return;
         }
 
         String userEmail = currentUser.getEmail();
-
-        // Correct reference based on DB structure (lowercase "inspectors")
         DatabaseReference inspectorsRef = FirebaseDatabase.getInstance().getReference("inspectors");
 
-        // Query: Find inspector by Email
-        // Note: Using "email" (lowercase) because that matches your DB screenshot
         inspectorsRef.orderByChild("email").equalTo(userEmail).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -107,15 +143,12 @@ public class add_to_schedule extends Fragment {
                         Inspector_class inspector = ds.getValue(Inspector_class.class);
 
                         if (inspector != null) {
-                            // Update request with real ID
                             request.setInspector_id(inspector.getID());
                             request.setInspection_time(time);
 
-                            // Save to DB
                             DatabaseReference requestRef = FirebaseDatabase.getInstance().getReference("inspection_requests");
                             requestRef.child(request.getRequest_uid()).setValue(request)
                                     .addOnSuccessListener(aVoid -> {
-                                        // User Feedback
                                         Toast.makeText(getContext(), "Added to schedule", Toast.LENGTH_SHORT).show();
                                     })
                                     .addOnFailureListener(e -> {
@@ -125,16 +158,39 @@ public class add_to_schedule extends Fragment {
                         break;
                     }
                 } else {
-                    // Log to console for developer only, do not show to user
-                    System.out.println("Debug: Inspector email not found in DB");
+                    System.out.println("Debug: Inspector email not found");
                 }
             }
-
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                // Log to console only
-                System.out.println("Debug Error: " + error.getMessage());
-            }
+            public void onCancelled(@NonNull DatabaseError error) {}
         });
+    }
+
+    // Helper method to validate time if date is today
+    private boolean isValidFutureTime(String dateStr, String timeStr) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+            Date reqDate = sdf.parse(dateStr);
+            Date today = sdf.parse(sdf.format(new Date())); // Today at 00:00:00
+
+            // If date is today, check the time
+            if (reqDate != null && reqDate.equals(today)) {
+                String[] parts = timeStr.split(":");
+                int selectedHour = Integer.parseInt(parts[0]);
+                int selectedMinute = Integer.parseInt(parts[1]);
+
+                Calendar now = Calendar.getInstance();
+                int currentHour = now.get(Calendar.HOUR_OF_DAY);
+                int currentMinute = now.get(Calendar.MINUTE);
+
+                // Return false if selected time is earlier than now
+                if (selectedHour < currentHour || (selectedHour == currentHour && selectedMinute <= currentMinute)) {
+                    return false;
+                }
+            }
+            return true; // Valid if date is future OR date is today but time is future
+        } catch (Exception e) {
+            return true; // If parse fails, assume valid to avoid blocking user
+        }
     }
 }

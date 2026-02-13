@@ -51,25 +51,16 @@ public class inspector_schedule extends Fragment {
 
         rvList.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        // Setup adapter with action listeners and restriction logic
+        // Setup adapter with action listeners
         adapter = new ScheduledInspectionsAdapter(scheduledList, new ScheduledInspectionsAdapter.OnItemActionListener() {
             @Override
             public void onCancelClick(Inspection_Request_class request) {
-                // Check if the inspection is today. If so, block the action.
-                if (isToday(request.getRequested_date())) {
-                    Toast.makeText(getContext(), "Cannot cancel inspection on the day of the event", Toast.LENGTH_LONG).show();
-                    return;
-                }
                 showCancelConfirmationDialog(request);
             }
 
             @Override
             public void onRescheduleClick(Inspection_Request_class request) {
-                // Check if the inspection is today. If so, block the action.
-                if (isToday(request.getRequested_date())) {
-                    Toast.makeText(getContext(), "Schedule changes are not allowed on the day of inspection", Toast.LENGTH_LONG).show();
-                    return;
-                }
+                // validation happens inside the picker
                 showTimePickerDialog(request);
             }
         });
@@ -187,7 +178,7 @@ public class inspector_schedule extends Fragment {
         request.setInspection_time(newTime);
 
         ref.child(request.getRequest_uid()).setValue(request)
-                .addOnSuccessListener(aVoid -> Toast.makeText(getContext(), "Hour Updated!", Toast.LENGTH_SHORT).show());
+                .addOnSuccessListener(aVoid -> Toast.makeText(getContext(), "Time Updated!", Toast.LENGTH_SHORT).show());
     }
 
     // Shows confirmation dialog before cancellation
@@ -200,9 +191,11 @@ public class inspector_schedule extends Fragment {
                 .show();
     }
 
-    // Shows TimePicker dialog for rescheduling
+    // Shows TimePicker dialog with validation for current day
     private void showTimePickerDialog(Inspection_Request_class request) {
         int hour = 12, minute = 0;
+
+        // Parse current scheduled time to show as default
         if (request.getInspection_time() != null && request.getInspection_time().contains(":")) {
             String[] parts = request.getInspection_time().split(":");
             hour = Integer.parseInt(parts[0]);
@@ -210,9 +203,24 @@ public class inspector_schedule extends Fragment {
         }
 
         TimePickerDialog mTimePicker = new TimePickerDialog(getContext(), (timePicker, selectedHour, selectedMinute) -> {
+
+            // Logic: If the inspection is TODAY, ensure the selected time is in the future
+            if (isToday(request.getRequested_date())) {
+                java.util.Calendar now = java.util.Calendar.getInstance();
+                int currentHour = now.get(java.util.Calendar.HOUR_OF_DAY);
+                int currentMinute = now.get(java.util.Calendar.MINUTE);
+
+                // Check if selected time is earlier than current time
+                if (selectedHour < currentHour || (selectedHour == currentHour && selectedMinute <= currentMinute)) {
+                    Toast.makeText(getContext(), "Please select a future time", Toast.LENGTH_LONG).show();
+                    return; // Stop here, do not update DB
+                }
+            }
+
             String newTime = String.format(Locale.getDefault(), "%02d:%02d", selectedHour, selectedMinute);
             updateMeetingTime(request, newTime);
-        }, hour, minute, true);
+
+        }, hour, minute, true); // true for 24 hour format
 
         mTimePicker.setTitle("Update Time");
         mTimePicker.show();

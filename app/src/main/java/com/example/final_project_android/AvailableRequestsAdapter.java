@@ -11,6 +11,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -22,6 +24,7 @@ import java.util.Locale;
 public class AvailableRequestsAdapter extends RecyclerView.Adapter<AvailableRequestsAdapter.ViewHolder> {
 
     private List<Inspection_Request_class> requestList;
+    private List<Inspection_Request_class> fullList; // Copy for search
     private OnRequestAcceptedListener listener;
 
     /**
@@ -33,6 +36,7 @@ public class AvailableRequestsAdapter extends RecyclerView.Adapter<AvailableRequ
 
     public AvailableRequestsAdapter(List<Inspection_Request_class> requestList, OnRequestAcceptedListener listener) {
         this.requestList = requestList;
+        this.fullList = new ArrayList<>(requestList);
         this.listener = listener;
     }
 
@@ -79,6 +83,34 @@ public class AvailableRequestsAdapter extends RecyclerView.Adapter<AvailableRequ
     @Override
     public int getItemCount() {
         return requestList.size();
+    }
+
+    // Call this from Fragment when Firebase data changes
+    public void updateList(List<Inspection_Request_class> newList) {
+        this.requestList.clear();
+        this.requestList.addAll(newList);
+
+        this.fullList.clear();
+        this.fullList.addAll(newList);
+        notifyDataSetChanged();
+    }
+
+    // Search Logic
+    public void filter(String query) {
+        requestList.clear();
+        if (query.isEmpty()) {
+            requestList.addAll(fullList);
+        } else {
+            String pattern = query.toLowerCase().trim();
+            for (Inspection_Request_class item : fullList) {
+                if ((item.getRes_name() != null && item.getRes_name().toLowerCase().contains(pattern)) ||
+                        (item.getAddress() != null && item.getAddress().toLowerCase().contains(pattern)) ||
+                        (item.getRequested_date() != null && item.getRequested_date().contains(pattern))) {
+                    requestList.add(item);
+                }
+            }
+        }
+        notifyDataSetChanged();
     }
 
     /**
