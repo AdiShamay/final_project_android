@@ -26,8 +26,6 @@ public class inspector_schedule extends Fragment {
         RecyclerView rvList = view.findViewById(R.id.rv_schedule_list);
         CalendarView cvCalendar = view.findViewById(R.id.cv_schedule_calendar);
 
-        Button fabAdd = view.findViewById(R.id.fab_add_schedule);
-
         // Setup dummy list
         rvList.setLayoutManager(new LinearLayoutManager(getContext()));
         rvList.setAdapter(new RestaurantAdapter(name -> {}));
@@ -54,12 +52,14 @@ public class inspector_schedule extends Fragment {
             btnList.setTextColor(Color.BLACK);
         });
 
-        // Add Button Logic
-        fabAdd.setOnClickListener(v -> {
-            Toast.makeText(getActivity(), "Open Add Schedule Dialog", Toast.LENGTH_SHORT).show();
+        // Add to schedule
+        Button btnAddSchedule = view.findViewById(R.id.btn_add_schedule);
+        btnAddSchedule.setOnClickListener(v -> {
+            Navigation.findNavController(v)
+                    .navigate(R.id.action_inspector_schedule2_to_add_to_schedule);
         });
 
-        // Initialize the professional back button
+        // Initialize return button
         ImageButton btnReturn = view.findViewById(R.id.btn_return);
         btnReturn.setOnClickListener(v -> {
             // Navigate back to the Inspector Dashboard

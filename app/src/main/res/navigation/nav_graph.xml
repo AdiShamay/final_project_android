@@ -162,7 +162,11 @@
     <fragment
         android:id="@+id/inspector_schedule2"
         android:name="com.example.final_project_android.inspector_schedule"
-        android:label="inspector_schedule" />
+        android:label="inspector_schedule" >
+        <action
+            android:id="@+id/action_inspector_schedule2_to_add_to_schedule"
+            app:destination="@id/add_to_schedule" />
+    </fragment>
     <fragment
         android:id="@+id/review_details2"
         android:name="com.example.final_project_android.inspection_details"
@@ -171,4 +175,8 @@
         android:id="@+id/notification_details2"
         android:name="com.example.final_project_android.notification_details"
         android:label="notification_details" />
+    <fragment
+        android:id="@+id/add_to_schedule"
+        android:name="com.example.final_project_android.add_to_schedule"
+        android:label="add_to_schedule" />
 </navigation>
