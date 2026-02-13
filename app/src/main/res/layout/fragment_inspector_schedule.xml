@@ -36,53 +36,12 @@
                 android:textStyle="bold" />
         </RelativeLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:background="#E0E0E0"
-            android:padding="4dp"
-            android:layout_marginBottom="16dp"
-            android:gravity="center">
-
-            <Button
-                android:id="@+id/btn_view_list"
-                android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:layout_weight="1"
-                android:text="List View"
-                android:backgroundTint="#2196F3"
-                android:textColor="#FFFFFF" />
-
-            <Button
-                android:id="@+id/btn_view_calendar"
-                android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:layout_weight="1"
-                android:text="Calendar View"
-                android:backgroundTint="#FFFFFF"
-                android:textColor="#000000" />
-        </LinearLayout>
-
-        <FrameLayout
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_schedule_list"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_schedule_list"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="visible" />
-
-            <CalendarView
-                android:id="@+id/cv_schedule_calendar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:background="#FFFFFF" />
-
-        </FrameLayout>
+            android:layout_weight="1"
+            android:visibility="visible" />
 
         <Button
             android:id="@+id/btn_add_schedule"
