@@ -17,20 +17,23 @@
         android:id="@+id/btn_restaurant"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Enter as Restaurant Owner"
-        android:layout_marginBottom="12dp" />
+        android:layout_marginBottom="12dp"
+        android:backgroundTint="#03A9F4"
+        android:text="Enter as Restaurant Owner" />
 
     <Button
         android:id="@+id/btn_inspector"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Enter as Sanitation Inspector"
-        android:layout_marginBottom="12dp" />
+        android:layout_marginBottom="12dp"
+        android:backgroundTint="#03A9F4"
+        android:text="Enter as Sanitation Inspector" />
 
     <Button
         android:id="@+id/btn_customer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="#03A9F4"
         android:text="View Restaurant Grades" />
 
 </LinearLayout>

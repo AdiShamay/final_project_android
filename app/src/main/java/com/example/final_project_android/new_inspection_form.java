@@ -57,7 +57,7 @@ public class new_inspection_form extends Fragment {
         Button btnSubmit = view.findViewById(R.id.btn_submit_inspection);
         ImageButton btnReturn = view.findViewById(R.id.btn_return);
 
-        // Setup Spinner with dummy data
+        //Setup Spinner with dummy data
         String[] restaurants = new String[]{"Select Restaurant...", "Pizza Place", "Sushi TLV", "Burger King"};
         ArrayAdapter<String> spinAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, restaurants);
         spinner.setAdapter(spinAdapter);

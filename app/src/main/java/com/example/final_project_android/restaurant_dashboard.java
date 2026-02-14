@@ -89,7 +89,6 @@ public class restaurant_dashboard extends Fragment {
         Button btnRequestNew = view.findViewById(R.id.btn_request_inspection);
         Button btnHistory = view.findViewById(R.id.btn_view_my_history);
         Button btnEdit = view.findViewById(R.id.btn_edit_details);
-        Button btnNotif = view.findViewById(R.id.btn_notifications);
 
         // Logout and return to home screen
         btnLogout.setOnClickListener(v -> {
@@ -113,12 +112,6 @@ public class restaurant_dashboard extends Fragment {
         btnEdit.setOnClickListener(v -> {
             Navigation.findNavController(v)
                     .navigate(R.id.action_restaurant_dashboard2_to_edit_restaurant_profile2);
-        });
-
-        // Notifications
-        btnNotif.setOnClickListener(v -> {
-            Navigation.findNavController(v)
-                    .navigate(R.id.action_restaurant_dashboard2_to_notifications2);
         });
 
         return view;

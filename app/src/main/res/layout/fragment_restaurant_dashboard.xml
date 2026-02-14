@@ -74,37 +74,29 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginBottom="20dp">
-
-        <Button
-            android:id="@+id/btn_notifications"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:text="Messages"
-            android:drawableStart="@android:drawable/ic_dialog_email"
-            android:backgroundTint="#2196F3" />
-    </LinearLayout>
+        android:layout_marginBottom="20dp"/>
 
     <Button
         android:id="@+id/btn_request_inspection"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:text="Manage Inspection Requests"
-        android:layout_marginBottom="12dp" />
+        android:layout_marginBottom="12dp"
+        android:backgroundTint="#673AB7"
+        android:text="Manage Inspection Requests" />
 
     <Button
         android:id="@+id/btn_view_my_history"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="View History"
-        android:backgroundTint="#555555"
-        android:layout_marginBottom="12dp" />
+        android:layout_marginBottom="12dp"
+        android:backgroundTint="#2196F3"
+        android:text="View History" />
 
     <Button
         android:id="@+id/btn_edit_details"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Edit Profile"
-        android:backgroundTint="#555555" />
+        android:backgroundTint="#FF9800"
+        android:text="Edit Profile" />
 
 </LinearLayout>
