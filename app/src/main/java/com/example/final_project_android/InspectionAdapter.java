@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
@@ -59,10 +61,25 @@ public class InspectionAdapter extends RecyclerView.Adapter<InspectionAdapter.Vi
         holder.pointsWatcher = new TextWatcher() {
             public void afterTextChanged(Editable s) {
                 try {
-                    int val = s.toString().isEmpty() ? 0 : Integer.parseInt(s.toString());
-                    item.setCurrentPoints(val);
-                    if (listener != null) listener.onPointsChanged();
-                } catch (Exception e) { item.setCurrentPoints(0); }
+                    String input = s.toString();
+                    if (input.isEmpty()) {
+                        item.setCurrentPoints(0);
+                        if (listener != null) listener.onPointsChanged();
+                        return;
+                    }
+                    int val = Integer.parseInt(input);
+                    if (val < 0 || val > 10) {
+                        Toast.makeText(holder.itemView.getContext(),
+                                "Please enter a grade between 0-10", Toast.LENGTH_SHORT).show();
+                        item.setCurrentPoints(0);
+                        holder.etPoints.setText("");
+                    } else {
+                        item.setCurrentPoints(val);
+                    }
+                    if(listener!=null)
+                        listener.onPointsChanged();
+                }
+                catch (Exception e) { item.setCurrentPoints(0); }
             }
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
