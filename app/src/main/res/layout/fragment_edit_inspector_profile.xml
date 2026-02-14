@@ -40,44 +40,50 @@
             android:layout_height="wrap_content"
             android:text="Full Name"
             android:layout_marginTop="10dp"/>
+
         <EditText
             android:id="@+id/et_insp_edit_name"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Israel Cohen" />
+            android:layout_height="wrap_content" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Email"
-            android:layout_marginTop="10dp"/>
+            android:layout_marginTop="10dp"
+            android:text="Email(read only)" />
+
         <EditText
             android:id="@+id/et_insp_edit_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="cohen@inspector.com" />
+            android:focusable="false"
+            android:clickable="false"
+            />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Company / Organization"
             android:layout_marginTop="10dp"/>
+
         <EditText
             android:id="@+id/et_insp_edit_company"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="City Health Dept." />
+            android:layout_height="wrap_content" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="License Number (Read Only)"
             android:layout_marginTop="10dp"/>
+
         <EditText
+            android:id="@+id/et_insp_edit_licNum"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="LIC-998877"
-            android:enabled="false" />
+            android:clickable="false"
+            android:enabled="false"
+            android:focusable="false" />
 
         <TextView
             android:layout_width="wrap_content"
