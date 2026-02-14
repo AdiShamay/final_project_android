@@ -45,20 +45,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Restaurant Name"
-            android:text="Pizza Place" />
+            />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Email Address"
-            android:layout_marginTop="10dp"/>
+            android:layout_marginTop="10dp"
+            android:text="Email Address(read only)" />
         <EditText
             android:id="@+id/et_edit_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Email Address"
+            android:focusable="false"
+            android:clickable="false"
             android:inputType="textEmailAddress"
-            android:text="pizza@example.com" />
+            />
 
         <TextView
             android:layout_width="wrap_content"
@@ -70,31 +72,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Address"
-            android:text="Herzl St 10, Tel Aviv" />
+            />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Business ID / Tax Number"
-            android:layout_marginTop="10dp"/>
+            android:layout_marginTop="10dp"
+            android:text="Business ID / Tax Number(read only)" />
         <EditText
             android:id="@+id/et_edit_tax_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:hint="Business ID"
+            android:focusable="false"
+            android:clickable="false"
             android:inputType="number"
-            android:text="512345678" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Update Business License (Required if owner changed):"
-            android:layout_marginTop="15dp" />
-        <Button
-            android:id="@+id/btn_upload_new_license"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Upload New License Image"
-            android:backgroundTint="#808080" />
+            />
 
         <TextView
             android:layout_width="wrap_content"
