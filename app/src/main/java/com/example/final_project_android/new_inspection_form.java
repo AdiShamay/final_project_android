@@ -8,7 +8,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.fragment.app.Fragment;
@@ -30,7 +29,9 @@ public class new_inspection_form extends Fragment {
 
     private InspectionAdapter adapter;
     private TextView tvTotal;
-    private EditText etBusinessId;
+    private EditText etBusinessId,etResName;
+
+
 
     // Firebase variables
     private FirebaseAuth mAuth;
@@ -44,23 +45,33 @@ public class new_inspection_form extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_new_inspection_form, container, false);
 
+
+
         // Initialize Firebase instances
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
         inspectionsRef = database.getReference("inspections");
 
         // Initialize UI components
-        Spinner spinner = view.findViewById(R.id.spinner_restaurants);
+        etResName = view.findViewById(R.id.et_restaurant_name);
         etBusinessId = view.findViewById(R.id.et_business_id);
         tvTotal = view.findViewById(R.id.tv_total_score);
         RecyclerView rvItems = view.findViewById(R.id.rv_inspection_items);
         Button btnSubmit = view.findViewById(R.id.btn_submit_inspection);
         ImageButton btnReturn = view.findViewById(R.id.btn_return);
 
-        //Setup Spinner with dummy data
-        String[] restaurants = new String[]{"Select Restaurant...", "Pizza Place", "Sushi TLV", "Burger King"};
-        ArrayAdapter<String> spinAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, restaurants);
-        spinner.setAdapter(spinAdapter);
+        //Retrieve the data passed from the Dashboard
+        String passedName = "";
+        String passedId = "";
+
+        if (getArguments() != null) {
+            passedName = getArguments().getString("restaurant_name", "");
+            passedId = getArguments().getString("restaurant_id", "");
+        }
+
+        //Set the text and ensure they are locked
+        etResName.setText(passedName);
+        etBusinessId.setText(passedId);
 
         // Setup RecyclerView layout
         rvItems.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -87,23 +98,14 @@ public class new_inspection_form extends Fragment {
         // Handle Submit button click
         btnSubmit.setOnClickListener(v -> {
 
-            // Validate restaurant selection
-            if (spinner.getSelectedItemPosition() == 0) {
-                Toast.makeText(getContext(), "Please select a restaurant", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            // Validate Business ID
+            String Restaurant_Name = etResName.getText().toString().trim();
             String businessIdInput = etBusinessId.getText().toString().trim();
-            if (businessIdInput.isEmpty()) {
-                Toast.makeText(getContext(), "Please enter Business ID", Toast.LENGTH_SHORT).show();
+
+            // Basic safety check in case navigation went wrong
+            if (Restaurant_Name.isEmpty() || businessIdInput.isEmpty()) {
+                Toast.makeText(getContext(), "Error: Missing restaurant data", Toast.LENGTH_SHORT).show();
                 return;
             }
-
-            // Capture data for the report
-            String Restaurant_Name = spinner.getSelectedItem().toString();
-            int Total_Score = adapter.calculateTotalPoints();
-            String Final_Grade = getGradeFromPoints(Total_Score);
 
             // Get current user email or default
             String Inspector_Email = "";
@@ -118,6 +120,9 @@ public class new_inspection_form extends Fragment {
 
             // Generate unique key in Firebase
             String Report_ID = inspectionsRef.push().getKey();
+
+            int Total_Score = adapter.calculateTotalPoints();
+            String Final_Grade = getGradeFromPoints(Total_Score);
 
             // Write to database if ID is valid
             if (Report_ID != null) {
@@ -173,4 +178,6 @@ public class new_inspection_form extends Fragment {
         else if (points <= 27) return "B";
         else return "C";
     }
+
+
 }

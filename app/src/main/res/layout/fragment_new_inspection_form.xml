@@ -36,31 +36,37 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Select Restaurant:"
+        android:text="Restaurant name:"
         android:textStyle="bold" />
 
-    <Spinner
-        android:id="@+id/spinner_restaurants"
+    <EditText
+        android:id="@+id/et_restaurant_name"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:background="#FFFFFF" />
+        android:background="#E0E0E0"
+        android:padding="10dp"
+        android:enabled="false"
+        android:focusable="false"
+        android:textColor="#333333" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Enter Business ID:"
+        android:text="Business ID:"
         android:textStyle="bold" />
 
     <EditText
         android:id="@+id/et_business_id"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Business ID"
         android:inputType="number"
-        android:background="#FFFFFF"
+        android:background="#E0E0E0"
         android:padding="10dp"
-        android:layout_marginBottom="12dp"/>
+        android:layout_marginBottom="12dp"
+        android:enabled="false"
+        android:focusable="false"
+        android:textColor="#333333" />
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

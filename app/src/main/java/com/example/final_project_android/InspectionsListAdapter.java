@@ -33,7 +33,6 @@ public class InspectionsListAdapter extends RecyclerView.Adapter<InspectionsList
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         // Temporary dummy data for display
         holder.tvDate.setText("2026-02-12");
-        holder.tvInspector.setText("Inspector: Dana Cohen");
         holder.tvGrade.setText(position % 2 == 0 ? "A" : "B");
 
         holder.itemView.setOnClickListener(v -> listener.onReviewClick());
@@ -48,7 +47,6 @@ public class InspectionsListAdapter extends RecyclerView.Adapter<InspectionsList
             super(itemView);
             // These IDs must exist inside item_history_row.xml
             tvDate = itemView.findViewById(R.id.tv_row_date);
-            tvInspector = itemView.findViewById(R.id.tv_row_inspector);
             tvGrade = itemView.findViewById(R.id.tv_row_grade);
         }
     }
