@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -30,9 +31,6 @@ public class new_inspection_form extends Fragment {
     private InspectionAdapter adapter;
     private TextView tvTotal;
     private EditText etBusinessId,etResName;
-
-
-
     // Firebase variables
     private FirebaseAuth mAuth;
     private FirebaseDatabase database;
@@ -44,8 +42,6 @@ public class new_inspection_form extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_new_inspection_form, container, false);
-
-
 
         // Initialize Firebase instances
         mAuth = FirebaseAuth.getInstance();
@@ -60,7 +56,7 @@ public class new_inspection_form extends Fragment {
         Button btnSubmit = view.findViewById(R.id.btn_submit_inspection);
         ImageButton btnReturn = view.findViewById(R.id.btn_return);
 
-        //Retrieve the data passed from the Dashboard
+        // Retrieve the data passed from the Dashboard
         String passedName = "";
         String passedId = "";
 
@@ -69,7 +65,7 @@ public class new_inspection_form extends Fragment {
             passedId = getArguments().getString("restaurant_id", "");
         }
 
-        //Set the text and ensure they are locked
+        // Set the text and ensure they are locked
         etResName.setText(passedName);
         etBusinessId.setText(passedId);
 
@@ -112,7 +108,8 @@ public class new_inspection_form extends Fragment {
             if (mAuth.getCurrentUser() != null) {
                 Inspector_Email = mAuth.getCurrentUser().getEmail();
             } else {
-                Inspector_Email = "Guest";
+                Toast.makeText(getContext(), "Error: Missing Inspector data", Toast.LENGTH_SHORT).show();
+                return;
             }
 
             // Get current date formatted
@@ -126,7 +123,11 @@ public class new_inspection_form extends Fragment {
 
             // Write to database if ID is valid
             if (Report_ID != null) {
+                // Create the Inspection Report
                 writeToDBInspection(Report_ID, businessIdInput, Inspector_Email, Restaurant_Name, Current_Date, Total_Score, Final_Grade, inspectionList);
+
+                // Delete the open request for this restaurant
+                deleteRequestByBusinessId(businessIdInput);
 
                 Toast.makeText(getActivity(), "Inspection Saved Successfully!", Toast.LENGTH_SHORT).show();
 
@@ -179,5 +180,27 @@ public class new_inspection_form extends Fragment {
         else return "C";
     }
 
+    // Helper function to find and delete the open request for this business
+    private void deleteRequestByBusinessId(String businessId) {
+        DatabaseReference requestsRef = database.getReference("inspection_requests");
 
+        // Query finding the request with this business_id
+        requestsRef.orderByChild("business_id").equalTo(businessId)
+                .addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
+                    @Override
+                    public void onDataChange(@androidx.annotation.NonNull com.google.firebase.database.DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            for (com.google.firebase.database.DataSnapshot child : snapshot.getChildren()) {
+                                // Delete the request node
+                                child.getRef().removeValue();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@androidx.annotation.NonNull DatabaseError error) {
+                        // Log error if needed
+                    }
+                });
+    }
 }

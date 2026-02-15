@@ -44,7 +44,7 @@ public class InspectionsListAdapter extends RecyclerView.Adapter<InspectionsList
 
         // עדכון ה-UI עם הנתונים מהאובייקט
         holder.tvDate.setText(inspection.getDate()); // וודא שיש getGetter ב-POJO
-        holder.tvGrade.setText("Grade: " + inspection.getFinal_Grade());
+        holder.tvGrade.setText("Grade: " + inspection.getFinal_grade());
 
         holder.itemView.setOnClickListener(v -> listener.onReviewClick());
     }
