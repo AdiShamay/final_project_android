@@ -22,7 +22,8 @@ public class new_inspection_item {
         this.currentPoints = 0; // Default is 0 (Clean)
         this.comments = ""; // Default is empty
     }
-
+    // Empty Constructor for FireBase
+    public new_inspection_item() {}
     // Getters and Setters
     public String getCategory() { return category; }
 

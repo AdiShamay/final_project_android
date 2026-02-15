@@ -68,7 +68,13 @@ public class inspector_dashboard extends Fragment {
 
         Button btnHistory = view.findViewById(R.id.btn_inspector_history);
         btnHistory.setOnClickListener(v -> {
-            Navigation.findNavController(v).navigate(R.id.action_inspector_dashboard2_to_restaurant_reviews2);
+            String currentInspectorEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+            if (currentInspectorEmail != null) {
+                Bundle bundle = new Bundle();
+                bundle.putString("filterType", "inspector_Email");
+                bundle.putString("filterValue", currentInspectorEmail.trim().toLowerCase());
+                Navigation.findNavController(v).navigate(R.id.action_inspector_dashboard2_to_restaurant_reviews2, bundle);
+            }
         });
 
         Button btnEdit = view.findViewById(R.id.btn_inspector_edit_profile);

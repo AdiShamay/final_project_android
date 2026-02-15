@@ -6,14 +6,17 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Adapter for the Inspection History list.
- * Displays summary data (Date, Inspector, Grade) for past reports.
+ * Displays real data from Firebase (Date, Inspector, Grade).
  */
 public class InspectionsListAdapter extends RecyclerView.Adapter<InspectionsListAdapter.ViewHolder> {
 
-    // Listener for navigating to details screen
+    // רשימה שתחזיק את הנתונים שיגיעו מה-Firebase
+    private List<Inspection_Report_class> inspectionsList = new ArrayList<>();
     public interface OnReviewClickListener { void onReviewClick(); }
     private final OnReviewClickListener listener;
 
@@ -21,9 +24,14 @@ public class InspectionsListAdapter extends RecyclerView.Adapter<InspectionsList
         this.listener = listener;
     }
 
+    // פונקציה קריטית: משמשת את ה-Fragment לעדכון הרשימה אחרי הסינון
+    public void setInspections(List<Inspection_Report_class> newList) {
+        this.inspectionsList = newList;
+        notifyDataSetChanged(); // רענון התצוגה על המסך
+    }
+
     @NonNull @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // IMPORTANT: Use a dedicated history layout file to match the IDs below
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_inspection_row, parent, false);
         return new ViewHolder(view);
@@ -31,21 +39,26 @@ public class InspectionsListAdapter extends RecyclerView.Adapter<InspectionsList
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        // Temporary dummy data for display
-        holder.tvDate.setText("2026-02-12");
-        holder.tvGrade.setText(position % 2 == 0 ? "A" : "B");
+        // שליפת הנתונים האמיתיים מהרשימה
+        Inspection_Report_class inspection = inspectionsList.get(position);
+
+        // עדכון ה-UI עם הנתונים מהאובייקט
+        holder.tvDate.setText(inspection.getDate()); // וודא שיש getGetter ב-POJO
+        holder.tvGrade.setText("Grade: " + inspection.getFinal_Grade());
 
         holder.itemView.setOnClickListener(v -> listener.onReviewClick());
     }
 
-    @Override public int getItemCount() { return 5; }
+    @Override
+    public int getItemCount() {
+        return inspectionsList.size(); // מחזיר את כמות התוצאות שנמצאו בחיפוש/סינון
+    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvDate, tvInspector, tvGrade;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            // These IDs must exist inside item_history_row.xml
             tvDate = itemView.findViewById(R.id.tv_row_date);
             tvGrade = itemView.findViewById(R.id.tv_row_grade);
         }
