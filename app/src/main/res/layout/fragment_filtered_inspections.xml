@@ -37,12 +37,14 @@
                 android:layout_gravity="center_horizontal" />
 
             <TextView
-                android:id="@+id/tv_specific_restaurant_name"
+                android:id="@+id/tv_target_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Restaurant Name Here"
-                android:textSize="14sp"
-                android:textColor="#555555"
+                android:text="Name"
+                android:textSize="22sp"
+                android:textColor="#000000"
+                android:textStyle="bold"
+                android:layout_marginTop="12dp"
                 android:layout_gravity="center_horizontal" />
         </LinearLayout>
 

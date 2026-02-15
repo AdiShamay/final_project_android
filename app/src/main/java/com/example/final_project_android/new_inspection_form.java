@@ -15,9 +15,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -25,20 +27,29 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Fragment for creating and submitting a new sanitation inspection report.
+ * Manages scoring logic, dynamic item listing, and Firebase integration.
+ */
 public class new_inspection_form extends Fragment {
 
     private InspectionItemsAdapter adapter;
     private TextView tvTotal;
-    private EditText etBusinessId,etResName;
-    // Firebase variables
+    private EditText etBusinessId, etResName;
+
+    // Firebase service instances
     private FirebaseAuth mAuth;
     private FirebaseDatabase database;
     private DatabaseReference inspectionsRef;
+
+    // Field to store the verified inspector ID
+    private String inspectorId = "";
 
     // Global list to hold data for submission
     private List<new_inspection_item> inspectionList;
 
     private String restaurantAddress = "";
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_new_inspection_form, container, false);
@@ -55,6 +66,9 @@ public class new_inspection_form extends Fragment {
         RecyclerView rvItems = view.findViewById(R.id.rv_inspection_items);
         Button btnSubmit = view.findViewById(R.id.btn_submit_inspection);
         ImageButton btnReturn = view.findViewById(R.id.btn_return);
+
+        // Fetch the inspector ID based on current authentication
+        loadCurrentInspectorId();
 
         // Retrieve the data passed from the Dashboard
         String passedName = "";
@@ -104,12 +118,9 @@ public class new_inspection_form extends Fragment {
                 return;
             }
 
-            // Get current user email or default
-            String Inspector_Email = "";
-            if (mAuth.getCurrentUser() != null) {
-                Inspector_Email = mAuth.getCurrentUser().getEmail();
-            } else {
-                Toast.makeText(getContext(), "Error: Missing Inspector data", Toast.LENGTH_SHORT).show();
+            // Ensure the inspector ID is loaded before allowing submission
+            if (inspectorId.isEmpty()) {
+                Toast.makeText(getContext(), "Error: Loading inspector data, please wait.", Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -124,8 +135,8 @@ public class new_inspection_form extends Fragment {
 
             // Write to database if ID is valid
             if (Report_ID != null) {
-                // Create the Inspection Report
-                writeToDBInspection(Report_ID, businessIdInput, Inspector_Email, Restaurant_Name, restaurantAddress, Current_Date, Total_Score, Final_Grade, inspectionList);
+                // Save report using the fetched inspector ID
+                writeToDBInspection(Report_ID, businessIdInput, inspectorId, Restaurant_Name, restaurantAddress, Current_Date, Total_Score, Final_Grade, inspectionList);
 
                 // Delete the open request for this restaurant
                 deleteRequestByBusinessId(businessIdInput);
@@ -145,10 +156,35 @@ public class new_inspection_form extends Fragment {
         return view;
     }
 
+    /**
+     * Retrieves the official inspector ID from the database using the authenticated email.
+     */
+    private void loadCurrentInspectorId() {
+        if (mAuth.getCurrentUser() == null) return;
+        String userEmail = mAuth.getCurrentUser().getEmail();
+
+        DatabaseReference inspectorsRef = database.getReference("inspectors");
+        inspectorsRef.orderByChild("email").equalTo(userEmail).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@androidx.annotation.NonNull DataSnapshot snapshot) {
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    Inspector_class inspector = ds.getValue(Inspector_class.class);
+                    if (inspector != null) {
+                        inspectorId = inspector.getID();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@androidx.annotation.NonNull DatabaseError error) { }
+        });
+    }
+
     // Function to write report object to Firebase
-    public void writeToDBInspection(String Report_ID, String Business_ID, String Inspector_Email, String Restaurant_Name, String Restaurant_Address, String Date, int Total_Score, String Final_Grade, List<new_inspection_item> Items) {
+    public void writeToDBInspection(String Report_ID, String Business_ID, String Inspector_ID, String Restaurant_Name, String Restaurant_Address, String Date, int Total_Score, String Final_Grade, List<new_inspection_item> Items) {
         DatabaseReference myRef = database.getReference("inspections").child(Report_ID);
-        Inspection_Report_class report = new Inspection_Report_class(Report_ID, Business_ID, Inspector_Email, Restaurant_Name, Restaurant_Address, Date, Total_Score, Final_Grade, Items);
+        // Create the report instance with the specific inspector ID
+        Inspection_Report_class report = new Inspection_Report_class(Report_ID, Business_ID, Inspector_ID, Restaurant_Name, Restaurant_Address, Date, Total_Score, Final_Grade, Items);
         myRef.setValue(report);
 
         //updating the restaurants DB to the newest grade and date

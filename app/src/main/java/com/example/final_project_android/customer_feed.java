@@ -44,7 +44,7 @@ public class customer_feed extends Fragment {
         rvRestaurants.setLayoutManager(new LinearLayoutManager(getContext()));
 
         // Create the adapter and define the click behavior
-        RestaurantAdapter adapter = new RestaurantAdapter(businessId -> {
+        InspectionReportAdapter adapter = new InspectionReportAdapter(businessId -> {
             // Navigate to the reviews page using the ID from nav_graph
             Bundle bundle = new Bundle();
 
@@ -57,20 +57,18 @@ public class customer_feed extends Fragment {
         // Attach the adapter to the RecyclerView
         rvRestaurants.setAdapter(adapter);
 
-        // Obtaining a reference to the DB (CHANGED: now pointing to "inspections")
+        // Obtaining a reference to the DB (inspections)
         DatabaseReference inspectionsRef = FirebaseDatabase.getInstance().getReference("inspections");
 
         //Adding a listener for retrieving data
         inspectionsRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                // CHANGED: Using Inspection_Report_class list
                 List<Inspection_Report_class> inspectionList = new ArrayList<>();
 
                 // check all inspections
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     // Automatic conversion of JSON from the cloud to Java object
-                    // CHANGED: Converting to Inspection_Report_class
                     Inspection_Report_class report = ds.getValue(Inspection_Report_class.class);
 
                     if (report != null) {
@@ -87,7 +85,6 @@ public class customer_feed extends Fragment {
 
                     // Tie-breaker sub-case: If dates are the same, sort alphabetically by name
                     if (dateCompare == 0) {
-                        // CHANGED: Using getRestaurant_name()
                         String name1 = (r1.getRestaurant_name() != null) ? r1.getRestaurant_name() : "";
                         String name2 = (r2.getRestaurant_name() != null) ? r2.getRestaurant_name() : "";
                         return name1.compareTo(name2);
@@ -96,8 +93,7 @@ public class customer_feed extends Fragment {
                 });
 
                 //Update the adapter with the sorted list
-                // CHANGED: setRestaurants now accepts Inspection_Report_class list
-                adapter.setRestaurants(inspectionList); // Note: Make sure Adapter method name matches (setInspections or setRestaurants)
+                adapter.setInspections(inspectionList);
 
                 //Activate the "Sort by Grade" button
                 Button btnSortGrade = view.findViewById(R.id.btn_sort_grade);

@@ -71,9 +71,6 @@
         android:name="com.example.final_project_android.inspector_dashboard"
         android:label="inspector_dashboard" >
         <action
-            android:id="@+id/action_inspector_dashboard2_to_notifications2"
-            app:destination="@id/notifications2" />
-        <action
             android:id="@+id/action_inspector_dashboard2_to_inspector_schedule2"
             app:destination="@id/inspector_schedule2" />
         <action
@@ -98,9 +95,6 @@
         android:id="@+id/restaurant_dashboard2"
         android:name="com.example.final_project_android.restaurant_dashboard"
         android:label="restaurant_dashboard" >
-        <action
-            android:id="@+id/action_restaurant_dashboard2_to_notifications2"
-            app:destination="@id/notifications2" />
         <action
             android:id="@+id/action_restaurant_dashboard2_to_restaurant_reviews2"
             app:destination="@id/restaurant_reviews2" />
@@ -133,7 +127,7 @@
         android:label="edit_restaurant_profile" />
     <fragment
         android:id="@+id/restaurant_reviews2"
-        android:name="com.example.final_project_android.restaurant_inspections"
+        android:name="com.example.final_project_android.filtered_inspections"
         android:label="restaurant_reviews" >
         <action
             android:id="@+id/action_restaurant_reviews2_to_review_details2"
@@ -143,14 +137,6 @@
         android:id="@+id/inspection_request2"
         android:name="com.example.final_project_android.inspection_request"
         android:label="inspection_request" />
-    <fragment
-        android:id="@+id/notifications2"
-        android:name="com.example.final_project_android.notifications"
-        android:label="notifications" >
-        <action
-            android:id="@+id/action_notifications2_to_notification_details2"
-            app:destination="@id/notification_details2" />
-    </fragment>
     <fragment
         android:id="@+id/edit_inspector_profile2"
         android:name="com.example.final_project_android.edit_inspector_profile"
@@ -171,10 +157,6 @@
         android:id="@+id/review_details2"
         android:name="com.example.final_project_android.inspection_details"
         android:label="review_details" />
-    <fragment
-        android:id="@+id/notification_details2"
-        android:name="com.example.final_project_android.notification_details"
-        android:label="notification_details" />
     <fragment
         android:id="@+id/add_to_schedule"
         android:name="com.example.final_project_android.add_to_schedule"

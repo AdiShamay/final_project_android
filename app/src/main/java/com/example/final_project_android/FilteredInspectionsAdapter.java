@@ -1,5 +1,6 @@
 package com.example.final_project_android;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,58 +10,74 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Adapter for the Inspection History list.
- * Displays real data from Firebase (Date, Inspector, Grade).
- */
+// Adapter for the filtered inspection history list
 public class FilteredInspectionsAdapter extends RecyclerView.Adapter<FilteredInspectionsAdapter.ViewHolder> {
 
-    // רשימה שתחזיק את הנתונים שיגיעו מה-Firebase
     private List<Inspection_Report_class> inspectionsList = new ArrayList<>();
-    public interface OnReviewClickListener { void onReviewClick(); }
+
+    // Updated interface to pass the unique report ID upon clicking
+    public interface OnReviewClickListener { void onReviewClick(String reportId); }
     private final OnReviewClickListener listener;
 
     public FilteredInspectionsAdapter(OnReviewClickListener listener) {
         this.listener = listener;
     }
 
-    // פונקציה קריטית: משמשת את ה-Fragment לעדכון הרשימה אחרי הסינון
+    // Replace current list with new filtered data
     public void setInspections(List<Inspection_Report_class> newList) {
         this.inspectionsList = newList;
-        notifyDataSetChanged(); // רענון התצוגה על המסך
+        notifyDataSetChanged();
     }
 
     @NonNull @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        // Inflating the custom card layout for each row
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_inspection_row, parent, false);
+                .inflate(R.layout.item_restaurant_card, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        // שליפת הנתונים האמיתיים מהרשימה
         Inspection_Report_class inspection = inspectionsList.get(position);
 
-        // עדכון ה-UI עם הנתונים מהאובייקט
-        holder.tvDate.setText(inspection.getDate()); // וודא שיש getGetter ב-POJO
-        holder.tvGrade.setText("Grade: " + inspection.getFinal_grade());
+        // Setting values from the data object to the view holder
+        holder.tvName.setText(inspection.getRestaurant_name());
+        holder.tvAddress.setText(inspection.getRestaurant_address());
+        holder.tvDate.setText(inspection.getDate());
 
-        holder.itemView.setOnClickListener(v -> listener.onReviewClick());
+        // Grade text and dynamic color assignment
+        String grade = inspection.getFinal_grade();
+        holder.tvGrade.setText(grade);
+
+        // Apply color based on the inspection grade
+        if ("A".equals(grade)) {
+            holder.tvGrade.setTextColor(Color.parseColor("#4CAF50"));
+        } else if ("B".equals(grade)) {
+            holder.tvGrade.setTextColor(Color.parseColor("#FFC107"));
+        } else {
+            holder.tvGrade.setTextColor(Color.RED);
+        }
+
+        // Trigger navigation and pass the specific report ID
+        holder.itemView.setOnClickListener(v -> listener.onReviewClick(inspection.getReport_id()));
     }
 
     @Override
     public int getItemCount() {
-        return inspectionsList.size(); // מחזיר את כמות התוצאות שנמצאו בחיפוש/סינון
+        return inspectionsList.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvDate, tvInspector, tvGrade;
+        TextView tvName, tvAddress, tvDate, tvGrade;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvDate = itemView.findViewById(R.id.tv_row_date);
-            tvGrade = itemView.findViewById(R.id.tv_row_grade);
+            // Linking UI components to their XML IDs
+            tvName = itemView.findViewById(R.id.tv_restaurant_name);
+            tvAddress = itemView.findViewById(R.id.tv_restaurant_address);
+            tvDate = itemView.findViewById(R.id.tv_inspection_date);
+            tvGrade = itemView.findViewById(R.id.tv_sanitation_grade);
         }
     }
 }

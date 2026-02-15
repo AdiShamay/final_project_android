@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -22,6 +23,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class filtered_inspections extends Fragment {
@@ -30,71 +32,87 @@ public class filtered_inspections extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_filtered_inspections, container, false);
 
-        // 1. אתחול ה-RecyclerView והאדאפטר
+        // Reference the target name TextView for dynamic title updates
+        TextView tvTargetName = view.findViewById(R.id.tv_target_name);
+
+        // Setup the RecyclerView with the updated adapter and navigation logic
         RecyclerView rvReviews = view.findViewById(R.id.rv_reviews_history);
         rvReviews.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        FilteredInspectionsAdapter adapter = new FilteredInspectionsAdapter(() -> {
-            Navigation.findNavController(view).navigate(R.id.action_restaurant_reviews2_to_review_details2);
+        // Receiver for the clicked report ID to perform navigation
+        FilteredInspectionsAdapter adapter = new FilteredInspectionsAdapter(reportId -> {
+            Bundle bundle = new Bundle();
+            bundle.putString("report_id", reportId);
+
+            // Navigate to the inspection details screen
+            Navigation.findNavController(view).navigate(R.id.action_restaurant_reviews2_to_review_details2, bundle);
         });
         rvReviews.setAdapter(adapter);
 
-        // 2. שליפת נתוני הסינון מה-Bundle
+        // Process arguments received from the previous fragment
         if (getArguments() != null) {
             String filterType = getArguments().getString("filterType");
             String filterValue = getArguments().getString("filterValue");
 
-            Log.d("CHECK_FIREBASE", "Bundle arrived! Type: " + filterType + ", Value: " + filterValue);
+            if ("inspector_id".equals(filterType)) {
+                String inspectorName = getArguments().getString("inspector_name");
+                if (inspectorName != null) tvTargetName.setText(inspectorName);
+            }
 
             if (filterValue != null) {
                 DatabaseReference ref = FirebaseDatabase.getInstance().getReference("inspections");
                 Query query;
 
-                // 3. בניית השאילתה הדינמית
-                if ("inspector_Email".equals(filterType)) {
-                    query = ref.orderByChild("inspector_Email").equalTo(filterValue.toLowerCase().trim());
-                } else if ("business_ID".equals(filterType)) {
-                    query = ref.orderByChild("business_ID").equalTo(filterValue);
+                // Build query based on inspector ID or business ID provided in the bundle
+                if ("inspector_id".equals(filterType)) {
+                    // Filter reviews based on the unique inspector ID (TZ)
+                    query = ref.orderByChild("inspector_id").equalTo(filterValue);
+                } else if ("business_id".equals(filterType)) {
+                    // Filter reviews based on the unique business license number
+                    query = ref.orderByChild("business_id").equalTo(filterValue);
                 } else {
-                    query = ref; // הצגת הכל במידה ואין פילטר מוכר
+                    query = ref;
                 }
 
-                // 4. מאזין יחיד ומאוחד לקבלת הנתונים
+                // Attach listener to fetch and sort data from Firebase
                 query.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        Log.d("CHECK_FIREBASE", "Results found: " + snapshot.getChildrenCount());
-
                         List<Inspection_Report_class> inspectionsList = new ArrayList<>();
 
                         if (snapshot.exists()) {
                             for (DataSnapshot ds : snapshot.getChildren()) {
-                                Inspection_Report_class inspection = ds.getValue(Inspection_Report_class.class);
-                                if (inspection != null) {
-                                    inspectionsList.add(inspection);
+                                Inspection_Report_class report = ds.getValue(Inspection_Report_class.class);
+                                if (report != null) {
+                                    inspectionsList.add(report);
                                 }
                             }
-                        } else {
-                            Log.d("CHECK_FIREBASE", "No records found for: " + filterValue);
-                        }
 
-                        // עדכון האדאפטר ברשימה (גם אם היא ריקה)
+                            // Update the header name for restaurants
+                            if (!inspectionsList.isEmpty() && "business_id".equals(filterType)) {
+                                tvTargetName.setText(inspectionsList.get(0).getRestaurant_name());
+                            }
+
+                            // Sort the retrieved data to ensure chronological order (newest first)
+                            Collections.sort(inspectionsList, (r1, r2) -> {
+                                String d1 = r1.getDate() != null ? r1.getDate() : "";
+                                String d2 = r2.getDate() != null ? r2.getDate() : "";
+                                return d2.compareTo(d1);
+                            });
+                        }
+                        // Refresh the adapter with the processed list
                         adapter.setInspections(inspectionsList);
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
-                        Toast.makeText(getContext(), "שגיאת מסד נתונים: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
-            } else {
-                Log.e("CHECK_FIREBASE", "filterValue is null!");
             }
-        } else {
-            Log.e("CHECK_FIREBASE", "No arguments received in Fragment!");
         }
 
-        // כפתור חזרה
+        // Return button functionality using the navigation back stack
         ImageButton btnReturn = view.findViewById(R.id.btn_return);
         btnReturn.setOnClickListener(v -> Navigation.findNavController(v).popBackStack());
 

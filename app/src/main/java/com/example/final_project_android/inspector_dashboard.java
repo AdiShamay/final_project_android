@@ -36,6 +36,8 @@ public class inspector_dashboard extends Fragment {
     private TextView tvNextResName, tvNextTime, tvNextAddress, tvNoInspection;
     private CardView cardNextInspection;
     private Button btnStartReportCard;
+    private String currentInspectorId;
+    private String currentInspectorName;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -68,12 +70,15 @@ public class inspector_dashboard extends Fragment {
 
         Button btnHistory = view.findViewById(R.id.btn_inspector_history);
         btnHistory.setOnClickListener(v -> {
-            String currentInspectorEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-            if (currentInspectorEmail != null) {
+            if (currentInspectorId != null) {
                 Bundle bundle = new Bundle();
-                bundle.putString("filterType", "inspector_Email");
-                bundle.putString("filterValue", currentInspectorEmail.trim().toLowerCase());
+                // pass the ID and the correct filter type
+                bundle.putString("filterType", "inspector_id");
+                bundle.putString("filterValue", currentInspectorId);
+                bundle.putString("inspector_name", currentInspectorName);
                 Navigation.findNavController(v).navigate(R.id.action_inspector_dashboard2_to_restaurant_reviews2, bundle);
+            } else {
+                Toast.makeText(getContext(), "Please wait, loading data...", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -110,6 +115,8 @@ public class inspector_dashboard extends Fragment {
                         if (inspector != null) {
                             // Update Greeting with Full Name
                             tvGreeting.setText("Hello, " + inspector.getFull_name());
+                            currentInspectorId = inspector.getID();
+                            currentInspectorName = inspector.getFull_name();
 
                             // Find the closest upcoming inspection using the Inspector's ID
                             findNextInspection(inspector.getID());
