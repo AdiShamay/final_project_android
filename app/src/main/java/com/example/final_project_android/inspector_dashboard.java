@@ -198,6 +198,7 @@ public class inspector_dashboard extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putString("restaurant_id", request.getBusiness_id());
                 bundle.putString("restaurant_name", request.getRes_name());
+                bundle.putString("restaurant_address", request.getAddress());
 
                 Navigation.findNavController(v).navigate(R.id.action_inspector_dashboard2_to_new_inspection_form2, bundle);
             });

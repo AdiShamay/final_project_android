@@ -19,20 +19,20 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
     private final OnItemClickListener listener;
 
     //two lists : one for the source and one for the filtered view
-    private List<Restaurant_class> allRestaurants = new ArrayList<>();
-    private List<Restaurant_class> filteredList = new ArrayList<>();
+    private List<Inspection_Report_class> allRestaurants = new ArrayList<>();
+    private List<Inspection_Report_class> filteredList = new ArrayList<>();
 
     public RestaurantAdapter(OnItemClickListener listener) {
         this.listener = listener;
     }
 
     // Function to update the list, keeping only restaurants with valid reviews (Grade + Date)
-    public void setRestaurants(List<Restaurant_class> restaurants) {
-        List<Restaurant_class> ratedRestaurants = new ArrayList<>();
+    public void setRestaurants(List<Inspection_Report_class> restaurants) {
+        List<Inspection_Report_class> ratedRestaurants = new ArrayList<>();
 
-        for (Restaurant_class res : restaurants) {
+        for (Inspection_Report_class res : restaurants) {
             // Check that BOTH Grade and Date exist and are not empty
-            boolean hasGrade = res.getHealth_score() != null && !res.getHealth_score().trim().isEmpty();
+            boolean hasGrade = res.getFinal_grade() != null && !res.getFinal_grade().trim().isEmpty();
             boolean hasDate = res.getDate() != null && !res.getDate().trim().isEmpty();
 
             if (hasGrade && hasDate) {
@@ -50,16 +50,16 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
         //Clearing the currently displayed list
         filteredList.clear();
 
-        // If the search is empty  all restaurants from the source are returned.
+        // If the search is empty all restaurants from the source are returned.
         if (query.isEmpty()) {
             filteredList.addAll(allRestaurants);
         } else {
             String pattern = query.toLowerCase().trim();
 
-            for (Restaurant_class res : allRestaurants) {
+            for (Inspection_Report_class res : allRestaurants) {
                 //Checking for a match between the parameters
-                boolean matchesName = res.getRes_name().toLowerCase().contains(pattern);
-                boolean matchesAddress = res.getAddress().toLowerCase().contains(pattern);
+                boolean matchesName = res.getRestaurant_name().toLowerCase().contains(pattern);
+                boolean matchesAddress = res.getRestaurant_address().toLowerCase().contains(pattern);
 
                 if (matchesName || matchesAddress ) {
                     filteredList.add(res);
@@ -80,13 +80,13 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        Restaurant_class restaurant = filteredList.get(position);
+        Inspection_Report_class restaurant = filteredList.get(position);
 
-        holder.tvName.setText(restaurant.getRes_name());
-        holder.tvAddress.setText(restaurant.getAddress());
+        holder.tvName.setText(restaurant.getRestaurant_name());
+        holder.tvAddress.setText(restaurant.getRestaurant_address());
 
         // Bind Health Score (Grade) with color logic
-        String grade = restaurant.getHealth_score();
+        String grade = restaurant.getFinal_grade();
         holder.tvGrade.setText("Grade: " + grade);
 
         // Set color based on grade
@@ -99,10 +99,10 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
         }
 
         // Bind Inspection Date
-        holder.tvDate.setText("Last Inspection: " + restaurant.getDate());
+        holder.tvDate.setText("Inspection Date: " + restaurant.getDate());
 
         holder.itemView.setOnClickListener(v -> {
-            listener.onItemClick(restaurant.getRes_name());
+            listener.onItemClick(restaurant.getBusiness_id());
         });
     }
     //get the size of the list
@@ -125,8 +125,8 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
 
     public void sortByGrade() {
         Collections.sort(allRestaurants, (r1, r2) -> {
-            String s1 = (r1.getHealth_score() != null) ? r1.getHealth_score() : "";
-            String s2 = (r2.getHealth_score() != null) ? r2.getHealth_score() : "";
+            String s1 = (r1.getFinal_grade() != null) ? r1.getFinal_grade() : "";
+            String s2 = (r2.getFinal_grade() != null) ? r2.getFinal_grade() : "";
 
             // 2. Handle empty scores
             if (s1.isEmpty() && s2.isEmpty()) return 0;

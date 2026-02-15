@@ -48,7 +48,7 @@
                 android:id="@+id/tv_inspection_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Last Inspection: 12/05/2026"
+                android:text="Inspection Date: 12/05/2026"
                 android:textSize="12sp"
                 android:textColor="#888888"
                 android:layout_marginTop="2dp" />

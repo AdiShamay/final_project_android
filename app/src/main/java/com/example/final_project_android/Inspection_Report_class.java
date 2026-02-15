@@ -13,6 +13,7 @@ public class Inspection_Report_class {
 
     // Report
     private String restaurant_name;
+    private String restaurant_address;
     private String date;
 
     // Scoring details
@@ -26,11 +27,12 @@ public class Inspection_Report_class {
     }
 
     // Full constructor for creating a new report
-    public Inspection_Report_class(String report_id, String business_id, String inspector_id, String restaurant_name, String date, int total_score, String final_grade, List<new_inspection_item> inspection_items_list) {
+    public Inspection_Report_class(String report_id, String business_id, String inspector_id, String restaurant_name, String restaurant_address, String date, int total_score, String final_grade, List<new_inspection_item> inspection_items_list) {
         this.report_id = report_id;
         this.business_id = business_id;
         this.inspector_id = inspector_id;
         this.restaurant_name = restaurant_name;
+        this.restaurant_address = restaurant_address;
         this.date = date;
         this.total_score = total_score;
         this.final_grade = final_grade;
@@ -69,6 +71,14 @@ public class Inspection_Report_class {
 
     public void setRestaurant_name(String restaurant_name) {
         this.restaurant_name = restaurant_name;
+    }
+
+    public String getRestaurant_address() {
+        return restaurant_address;
+    }
+
+    public void setRestaurant_address(String restaurant_address) {
+        this.restaurant_address = restaurant_address;
     }
 
     public String getDate() {

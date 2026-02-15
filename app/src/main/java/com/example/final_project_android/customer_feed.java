@@ -20,11 +20,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.NullUnmarked;
+import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -46,33 +44,43 @@ public class customer_feed extends Fragment {
         rvRestaurants.setLayoutManager(new LinearLayoutManager(getContext()));
 
         // Create the adapter and define the click behavior
-        RestaurantAdapter adapter = new RestaurantAdapter(restaurantName -> {
+        // CHANGED: Now receiving reportId instead of restaurantName
+        RestaurantAdapter adapter = new RestaurantAdapter(businessId -> {
             // Navigate to the reviews page using the ID from nav_graph
-            Navigation.findNavController(view).navigate(R.id.action_customer_feed2_to_restaurant_reviews2);
+            Bundle bundle = new Bundle();
+
+            bundle.putString("filterType", "business_id");
+            bundle.putString("filterValue", businessId);
+
+            Navigation.findNavController(view).navigate(R.id.action_customer_feed2_to_restaurant_reviews2, bundle);
         });
 
         // Attach the adapter to the RecyclerView
         rvRestaurants.setAdapter(adapter);
 
-        // Obtaining a reference to the DB (restaurants)
-        DatabaseReference restaurantsRef = FirebaseDatabase.getInstance().getReference("restaurants");
+        // Obtaining a reference to the DB (CHANGED: now pointing to "inspections")
+        DatabaseReference inspectionsRef = FirebaseDatabase.getInstance().getReference("inspections");
 
         //Adding a listener for retrieving data
-        restaurantsRef.addValueEventListener(new ValueEventListener() {
+        inspectionsRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                List<Restaurant_class> restaurantList = new ArrayList<>();
-                // check all restaurants
+                // CHANGED: Using Inspection_Report_class list
+                List<Inspection_Report_class> inspectionList = new ArrayList<>();
+
+                // check all inspections
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     // Automatic conversion of JSON from the cloud to Java object
-                    Restaurant_class restaurant = ds.getValue(Restaurant_class.class);
+                    // CHANGED: Converting to Inspection_Report_class
+                    Inspection_Report_class report = ds.getValue(Inspection_Report_class.class);
 
-                    if (restaurant != null) {
-                        restaurantList.add(restaurant);
+                    if (report != null) {
+                        inspectionList.add(report);
                     }
                 }
+
                 //Default Sort: Sort by Date (Newest First)
-                Collections.sort(restaurantList, (r1, r2) -> {
+                Collections.sort(inspectionList, (r1, r2) -> {
                     String date1 = (r1.getDate() != null) ? r1.getDate() : "";
                     String date2 = (r2.getDate() != null) ? r2.getDate() : "";
 
@@ -80,15 +88,17 @@ public class customer_feed extends Fragment {
 
                     // Tie-breaker sub-case: If dates are the same, sort alphabetically by name
                     if (dateCompare == 0) {
-                        String name1 = (r1.getRes_name() != null) ? r1.getRes_name() : "";
-                        String name2 = (r2.getRes_name() != null) ? r2.getRes_name() : "";
+                        // CHANGED: Using getRestaurant_name()
+                        String name1 = (r1.getRestaurant_name() != null) ? r1.getRestaurant_name() : "";
+                        String name2 = (r2.getRestaurant_name() != null) ? r2.getRestaurant_name() : "";
                         return name1.compareTo(name2);
                     }
                     return dateCompare;
                 });
 
                 //Update the adapter with the sorted list
-                adapter.setRestaurants(restaurantList);
+                // CHANGED: setRestaurants now accepts Inspection_Report_class list
+                adapter.setRestaurants(inspectionList); // Note: Make sure Adapter method name matches (setInspections or setRestaurants)
 
                 //Activate the "Sort by Grade" button
                 Button btnSortGrade = view.findViewById(R.id.btn_sort_grade);
@@ -107,17 +117,17 @@ public class customer_feed extends Fragment {
         });
 
         //search logic
-            SearchView searchView = view.findViewById(R.id.Customer_search);
-            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                @Override
-                public boolean onQueryTextSubmit(String query) { return false; }
+        SearchView searchView = view.findViewById(R.id.Customer_search);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) { return false; }
 
-                @Override
-                public boolean onQueryTextChange(String newText) {
-                    adapter.filter(newText);
-                    return true;
-                }
-            });
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapter.filter(newText);
+                return true;
+            }
+        });
 
         //the Return button
         // Use ImageButton with the consistent ID btn_return
@@ -127,6 +137,6 @@ public class customer_feed extends Fragment {
             Navigation.findNavController(v).popBackStack();
         });
 
-            return view;
+        return view;
     }
 }

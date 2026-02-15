@@ -39,6 +39,7 @@ public class new_inspection_form extends Fragment {
     // Global list to hold data for submission
     private List<new_inspection_item> inspectionList;
 
+    private String restaurantAddress = "";
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_new_inspection_form, container, false);
@@ -63,6 +64,7 @@ public class new_inspection_form extends Fragment {
         if (getArguments() != null) {
             passedName = getArguments().getString("restaurant_name", "");
             passedId = getArguments().getString("restaurant_id", "");
+            restaurantAddress = getArguments().getString("restaurant_address", "");
         }
 
         // Set the text and ensure they are locked
@@ -124,7 +126,7 @@ public class new_inspection_form extends Fragment {
             // Write to database if ID is valid
             if (Report_ID != null) {
                 // Create the Inspection Report
-                writeToDBInspection(Report_ID, businessIdInput, Inspector_Email, Restaurant_Name, Current_Date, Total_Score, Final_Grade, inspectionList);
+                writeToDBInspection(Report_ID, businessIdInput, Inspector_Email, Restaurant_Name, restaurantAddress, Current_Date, Total_Score, Final_Grade, inspectionList);
 
                 // Delete the open request for this restaurant
                 deleteRequestByBusinessId(businessIdInput);
@@ -145,9 +147,9 @@ public class new_inspection_form extends Fragment {
     }
 
     // Function to write report object to Firebase
-    public void writeToDBInspection(String Report_ID, String Business_ID, String Inspector_Email, String Restaurant_Name, String Date, int Total_Score, String Final_Grade, List<new_inspection_item> Items) {
+    public void writeToDBInspection(String Report_ID, String Business_ID, String Inspector_Email, String Restaurant_Name, String Restaurant_Address, String Date, int Total_Score, String Final_Grade, List<new_inspection_item> Items) {
         DatabaseReference myRef = database.getReference("inspections").child(Report_ID);
-        Inspection_Report_class report = new Inspection_Report_class(Report_ID, Business_ID, Inspector_Email, Restaurant_Name, Date, Total_Score, Final_Grade, Items);
+        Inspection_Report_class report = new Inspection_Report_class(Report_ID, Business_ID, Inspector_Email, Restaurant_Name, Restaurant_Address, Date, Total_Score, Final_Grade, Items);
         myRef.setValue(report);
 
         //updating the restaurants DB to the newest grade and date
