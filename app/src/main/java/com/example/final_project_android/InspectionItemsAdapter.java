@@ -17,7 +17,7 @@ import java.util.List;
  * Adapter for the inspection checklist form.
  * Handles real-time point calculation and comment saving.
  */
-public class InspectionAdapter extends RecyclerView.Adapter<InspectionAdapter.ViewHolder> {
+public class InspectionItemsAdapter extends RecyclerView.Adapter<InspectionItemsAdapter.ViewHolder> {
 
     private List<new_inspection_item> items;
     private OnPointsChangedListener listener;
@@ -25,7 +25,7 @@ public class InspectionAdapter extends RecyclerView.Adapter<InspectionAdapter.Vi
     // Interface to notify the Fragment when points are updated
     public interface OnPointsChangedListener { void onPointsChanged(); }
 
-    public InspectionAdapter(List<new_inspection_item> items, OnPointsChangedListener listener) {
+    public InspectionItemsAdapter(List<new_inspection_item> items, OnPointsChangedListener listener) {
         this.items = items;
         this.listener = listener;
     }

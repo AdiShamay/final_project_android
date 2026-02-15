@@ -13,14 +13,14 @@ import java.util.List;
  * Adapter for the Inspection History list.
  * Displays real data from Firebase (Date, Inspector, Grade).
  */
-public class InspectionsListAdapter extends RecyclerView.Adapter<InspectionsListAdapter.ViewHolder> {
+public class FilteredInspectionsAdapter extends RecyclerView.Adapter<FilteredInspectionsAdapter.ViewHolder> {
 
     // רשימה שתחזיק את הנתונים שיגיעו מה-Firebase
     private List<Inspection_Report_class> inspectionsList = new ArrayList<>();
     public interface OnReviewClickListener { void onReviewClick(); }
     private final OnReviewClickListener listener;
 
-    public InspectionsListAdapter(OnReviewClickListener listener) {
+    public FilteredInspectionsAdapter(OnReviewClickListener listener) {
         this.listener = listener;
     }
 

@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -28,7 +27,7 @@ import java.util.Locale;
 
 public class new_inspection_form extends Fragment {
 
-    private InspectionAdapter adapter;
+    private InspectionItemsAdapter adapter;
     private TextView tvTotal;
     private EditText etBusinessId,etResName;
     // Firebase variables
@@ -87,7 +86,7 @@ public class new_inspection_form extends Fragment {
         inspectionList.add(new new_inspection_item("4. MAINTENANCE", "Non-food contact surface not clean"));
 
         // Initialize Adapter with listener
-        adapter = new InspectionAdapter(inspectionList, () -> {
+        adapter = new InspectionItemsAdapter(inspectionList, () -> {
             updateTotalScoreUI();
         });
         rvItems.setAdapter(adapter);

@@ -24,17 +24,17 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class restaurant_inspections extends Fragment {
+public class filtered_inspections extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_restaurant_inspections, container, false);
+        View view = inflater.inflate(R.layout.fragment_filtered_inspections, container, false);
 
         // 1. אתחול ה-RecyclerView והאדאפטר
         RecyclerView rvReviews = view.findViewById(R.id.rv_reviews_history);
         rvReviews.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        InspectionsListAdapter adapter = new InspectionsListAdapter(() -> {
+        FilteredInspectionsAdapter adapter = new FilteredInspectionsAdapter(() -> {
             Navigation.findNavController(view).navigate(R.id.action_restaurant_reviews2_to_review_details2);
         });
         rvReviews.setAdapter(adapter);

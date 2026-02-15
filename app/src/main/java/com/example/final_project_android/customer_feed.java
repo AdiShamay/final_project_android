@@ -44,7 +44,6 @@ public class customer_feed extends Fragment {
         rvRestaurants.setLayoutManager(new LinearLayoutManager(getContext()));
 
         // Create the adapter and define the click behavior
-        // CHANGED: Now receiving reportId instead of restaurantName
         RestaurantAdapter adapter = new RestaurantAdapter(businessId -> {
             // Navigate to the reviews page using the ID from nav_graph
             Bundle bundle = new Bundle();

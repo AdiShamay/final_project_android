@@ -27,9 +27,8 @@ public class AvailableRequestsAdapter extends RecyclerView.Adapter<AvailableRequ
     private List<Inspection_Request_class> fullList; // Copy for search
     private OnRequestAcceptedListener listener;
 
-    /**
-     * Interface for handling request acceptance events.
-     */
+    // Interface for handling request acceptance events.
+
     public interface OnRequestAcceptedListener {
         void onAccepted(Inspection_Request_class request, String time);
     }
