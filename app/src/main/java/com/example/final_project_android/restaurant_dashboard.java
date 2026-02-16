@@ -128,6 +128,7 @@ public class restaurant_dashboard extends Fragment {
                 bundle.putString("filterType", "business_id");
                 // Pass the actual license number we fetched earlier
                 bundle.putString("filterValue", currentBusinessId);
+                bundle.putString("restaurant_name", currentRestaurant.getRes_name());
 
                 Navigation.findNavController(v)
                         .navigate(R.id.action_restaurant_dashboard2_to_restaurant_reviews2, bundle);

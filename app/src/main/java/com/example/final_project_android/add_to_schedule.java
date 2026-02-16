@@ -52,6 +52,18 @@ public class add_to_schedule extends Fragment {
 
         // Setup adapter with Time Validation Logic
         adapter = new AvailableRequestsAdapter(availableList, (request, time) -> {
+
+            // Parse hour AND minute to handle boundaries
+            String[] timeParts = time.split(":");
+            int hourToCheck = Integer.parseInt(timeParts[0]);
+            int minuteToCheck = Integer.parseInt(timeParts[1]);
+
+            // Validation: Block anything before 10:00 or after 19:00
+            if (hourToCheck < 10 || hourToCheck > 19 || (hourToCheck == 19 && minuteToCheck > 0)) {
+                Toast.makeText(getContext(), "Please select a time between 10:00 and 19:00", Toast.LENGTH_LONG).show();
+                return;
+            }
+
             // Check if the selected time is valid (only if date is today)
             if (!isValidFutureTime(request.getRequested_date(), time)) {
                 Toast.makeText(getContext(), "For today's inspection, please select a future time", Toast.LENGTH_LONG).show();
@@ -147,8 +159,6 @@ public class add_to_schedule extends Fragment {
         requestRef.child(request.getRequest_uid()).setValue(request)
                 .addOnSuccessListener(aVoid -> {
                     Toast.makeText(getContext(), "Added to schedule", Toast.LENGTH_SHORT).show();
-                    // Navigate back to the schedule immediately
-                    Navigation.findNavController(getView()).popBackStack();
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(getContext(), "Connection Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();

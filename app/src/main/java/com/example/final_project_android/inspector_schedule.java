@@ -203,7 +203,13 @@ public class inspector_schedule extends Fragment {
 
         TimePickerDialog mTimePicker = new TimePickerDialog(getContext(), (timePicker, selectedHour, selectedMinute) -> {
 
-            // Logic: If the inspection is TODAY, ensure the selected time is in the future
+            // Validation: Block anything before 10:00 or after 19:00
+            if (selectedHour < 10 || selectedHour > 19 || (selectedHour == 19 && selectedMinute > 0)) {
+                Toast.makeText(getContext(), "Please select a time between 10:00 and 19:00", Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            // If the inspection is TODAY, ensure the selected time is in the future
             if (isToday(request.getRequested_date())) {
                 java.util.Calendar now = java.util.Calendar.getInstance();
                 int currentHour = now.get(java.util.Calendar.HOUR_OF_DAY);
@@ -211,7 +217,7 @@ public class inspector_schedule extends Fragment {
 
                 // Check if selected time is earlier than current time
                 if (selectedHour < currentHour || (selectedHour == currentHour && selectedMinute <= currentMinute)) {
-                    Toast.makeText(getContext(), "Please select a future time", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "For today's inspection, please select a future time", Toast.LENGTH_LONG).show();
                     return; // Stop here, do not update DB
                 }
             }

@@ -221,14 +221,13 @@ public class inspector_dashboard extends Fragment {
             tvNextAddress.setText(request.getAddress());
             tvNextTime.setText(request.getRequested_date() + ", " + request.getInspection_time());
 
-            //checking if the time for the inspetion has arrived
+            //checking if the time for the inspection has arrived
             boolean isTimeValid= isWithinTimeMargin(request.getRequested_date(),request.getInspection_time());
 
             if(isTimeValid) {
-                // Button is active and colored
-                btnStartReportCard.setEnabled(true);
+                // Button is colored
                 btnStartReportCard.setAlpha(1.0f);
-                btnStartReportCard.setBackgroundColor(android.graphics.Color.parseColor("#009688"));
+                btnStartReportCard.setBackgroundColor(android.graphics.Color.parseColor("#2498FB"));
 
                 // Set Action for the "Start" button inside the card
                 btnStartReportCard.setOnClickListener(v -> {
@@ -242,14 +241,15 @@ public class inspector_dashboard extends Fragment {
                     Navigation.findNavController(v).navigate(R.id.action_inspector_dashboard2_to_new_inspection_form2, bundle);
                 });
             }else {
-                // Button is "dead": disabled and faded out
-                btnStartReportCard.setEnabled(false);
-                btnStartReportCard.setAlpha(0.5f);
-                btnStartReportCard.setBackgroundColor(android.graphics.Color.GRAY);
+                // Set light gray background to look disabled
+                btnStartReportCard.setBackgroundColor(android.graphics.Color.parseColor("#E0E0E0"));
 
-                // Set a click listener even on the disabled button to show the explanation toast
-                cardNextInspection.setOnClickListener(v -> {
-                    Toast.makeText(getContext(), "Inspection available only on the set time" + request.getRequested_date(), Toast.LENGTH_LONG).show();
+                // Set dark gray text for better readability
+                btnStartReportCard.setTextColor(android.graphics.Color.parseColor("#616161"));
+
+                // Show error message when clicked
+                btnStartReportCard.setOnClickListener(v -> {
+                    Toast.makeText(getContext(), "Inspection available only around scheduled time", Toast.LENGTH_LONG).show();
                 });
             }
         }else{
@@ -265,8 +265,8 @@ public class inspector_dashboard extends Fragment {
             long now = System.currentTimeMillis();
             long schedMillis = scheduled.getTime();
 
-            // 30 minutes = 1,800,000 milliseconds
-            long margin = 30 * 60 * 1000;
+            // 60 minutes
+            long margin = 60 * 60 * 1000;
 
             return Math.abs(now - schedMillis) <= margin;
         } catch (Exception e) {

@@ -366,7 +366,7 @@ public class inspection_request extends Fragment {
 
         //Check if the inspection is scheduled for tomorrow
        if (isDateTooLate(activeRequest.getRequested_date())) {
-            Toast.makeText(getContext(), "Cannot delete the scheduled inspection.", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), "Inspections scheduled for today or tomorrow cannot be cancelled.", Toast.LENGTH_LONG).show();
             return;
         }
 

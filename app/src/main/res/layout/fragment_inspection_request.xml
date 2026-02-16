@@ -95,10 +95,14 @@
 
         <Button
             android:id="@+id/Delete_request"
-            android:layout_width="match_parent"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="#CC2929"
-            android:text="Delete request" />
+            android:text="Cancel Request"
+            android:textColor="#CC2929"
+            android:textSize="14sp"
+            android:textAllCaps="false"
+            android:layout_marginTop="0dp" />
 
     </LinearLayout>
 </LinearLayout>

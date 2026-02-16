@@ -59,6 +59,11 @@ public class filtered_inspections extends Fragment {
                 if (inspectorName != null) tvTargetName.setText(inspectorName);
             }
 
+            if ("business_id".equals(filterType)) {
+                String resName = getArguments().getString("restaurant_name");
+                if (resName != null) tvTargetName.setText(resName);
+            }
+
             if (filterValue != null) {
                 DatabaseReference ref = FirebaseDatabase.getInstance().getReference("inspections");
                 Query query;
@@ -86,11 +91,6 @@ public class filtered_inspections extends Fragment {
                                 if (report != null) {
                                     inspectionsList.add(report);
                                 }
-                            }
-
-                            // Update the header name for restaurants
-                            if (!inspectionsList.isEmpty() && "business_id".equals(filterType)) {
-                                tvTargetName.setText(inspectionsList.get(0).getRestaurant_name());
                             }
 
                             // Sort the retrieved data to ensure chronological order (newest first)
