@@ -48,7 +48,7 @@ public class InspectionReportAdapter extends RecyclerView.Adapter<InspectionRepo
         notifyDataSetChanged();
     }
 
-    // search by name and addres or grade logic
+    // search by name or addres logic
     public void filter(String query) {
         //Clearing the currently displayed list
         filteredList.clear();
@@ -126,28 +126,57 @@ public class InspectionReportAdapter extends RecyclerView.Adapter<InspectionRepo
         }
     }
 
+    // Sorts the displayed list by Health Grade (A -> B -> C)
+    // If grades are equal, it uses the Date as a secondary sort (Newest first)
     public void sortByGrade() {
-        Collections.sort(allInspections, (r1, r2) -> {
+        java.util.Comparator<Inspection_Report_class> gradeComparator = (r1, r2) -> {
             String s1 = (r1.getFinal_grade() != null) ? r1.getFinal_grade() : "";
             String s2 = (r2.getFinal_grade() != null) ? r2.getFinal_grade() : "";
 
-            // 2. Handle empty scores
+            // Handle empty or null grades (push to bottom)
             if (s1.isEmpty() && s2.isEmpty()) return 0;
             if (s1.isEmpty()) return 1;
             if (s2.isEmpty()) return -1;
 
-            //Primary Sort: Health Grade (A -> B -> C)
+            // Compare grades alphabetically
             int gradeCompare = s1.compareTo(s2);
 
-            // 4. Sub-case Tie-breaker: If grades are the same, sort by Date (Newest first)
+            // Tie-breaker: If grades are identical, sort by Date descending
             if (gradeCompare == 0) {
                 String date1 = (r1.getDate() != null) ? r1.getDate() : "";
                 String date2 = (r2.getDate() != null) ? r2.getDate() : "";
-                return date2.compareTo(date1); // Descending date
+                return date2.compareTo(date1);
             }
 
             return gradeCompare;
-        });
+        };
+
+        // Apply sorting to the list currently shown to the user
+        Collections.sort(filteredList, gradeComparator);
+
+        // Apply sorting to the source list to maintain order when search filter is cleared
+        Collections.sort(allInspections, gradeComparator);
+
+        // Refresh the RecyclerView to show the new order
+        notifyDataSetChanged();
+    }
+
+    // Sorts the displayed list by Date (Newest -> Oldest)
+    public void sortByDate() {
+        java.util.Comparator<Inspection_Report_class> dateComparator = (r1, r2) -> {
+            String date1 = (r1.getDate() != null) ? r1.getDate() : "";
+            String date2 = (r2.getDate() != null) ? r2.getDate() : "";
+            // Descending order (Newest date first)
+            return date2.compareTo(date1);
+        };
+
+        // Apply sorting to the list currently shown to the user
+        Collections.sort(filteredList, dateComparator);
+
+        // Apply sorting to the source list
+        Collections.sort(allInspections, dateComparator);
+
+        // Refresh the RecyclerView to show the new order
         notifyDataSetChanged();
     }
 }

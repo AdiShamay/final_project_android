@@ -1,5 +1,6 @@
 package com.example.final_project_android;
 
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +24,6 @@ import com.google.firebase.database.ValueEventListener;
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -76,34 +76,13 @@ public class customer_feed extends Fragment {
                     }
                 }
 
-                //Default Sort: Sort by Date (Newest First)
-                Collections.sort(inspectionList, (r1, r2) -> {
-                    String date1 = (r1.getDate() != null) ? r1.getDate() : "";
-                    String date2 = (r2.getDate() != null) ? r2.getDate() : "";
-
-                    int dateCompare = date2.compareTo(date1); // Descending order
-
-                    // Tie-breaker sub-case: If dates are the same, sort alphabetically by name
-                    if (dateCompare == 0) {
-                        String name1 = (r1.getRestaurant_name() != null) ? r1.getRestaurant_name() : "";
-                        String name2 = (r2.getRestaurant_name() != null) ? r2.getRestaurant_name() : "";
-                        return name1.compareTo(name2);
-                    }
-                    return dateCompare;
-                });
-
-                //Update the adapter with the sorted list
+                //Update the adapter with the list from Firebase
                 adapter.setInspections(inspectionList);
 
-                //Activate the "Sort by Grade" button
-                Button btnSortGrade = view.findViewById(R.id.btn_sort_grade);
-                if (btnSortGrade != null) {
-                    btnSortGrade.setOnClickListener(v -> {
-                        // This calls the logic we implemented in the Adapter earlier
-                        adapter.sortByGrade();
-                    });
-                }
+                //Default Sort: Ensure the list is sorted by Date (Newest First) initially
+                adapter.sortByDate();
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 // Error handling
@@ -123,6 +102,36 @@ public class customer_feed extends Fragment {
                 return true;
             }
         });
+
+        // Activate the "Sort by Grade" button with Toggle functionality
+        Button btnSortGrade = view.findViewById(R.id.btn_sort_grade);
+
+        // Array to hold the state: [false] = Sorted by Date (Default), [true] = Sorted by Grade
+        final boolean[] isSortedByGrade = {false};
+
+        if (btnSortGrade != null) {
+            btnSortGrade.setOnClickListener(v -> {
+                if (!isSortedByGrade[0]) {
+                    // Switch to Grade Sort using the adapter method
+                    adapter.sortByGrade();
+                    isSortedByGrade[0] = true;
+
+                    // Change text and background color to indicate active state
+                    btnSortGrade.setText("Date");
+                    btnSortGrade.setBackgroundTintList(ColorStateList.valueOf(android.graphics.Color.parseColor("#0D47A1")));
+                } else {
+                    // Revert to Date Sort using the adapter method
+                    adapter.sortByDate();
+                    isSortedByGrade[0] = false;
+
+                    // Revert text and background color to original
+                    btnSortGrade.setText("Grade");
+                    // Retrieve original color from resources
+                    int originalColor = view.getContext().getColor(R.color.blue);
+                    btnSortGrade.setBackgroundTintList(ColorStateList.valueOf(originalColor));
+                }
+            });
+        }
 
         //the Return button
         // Use ImageButton with the consistent ID btn_return
