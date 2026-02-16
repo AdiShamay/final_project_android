@@ -14,7 +14,7 @@ import java.util.List;
 public class InspectionReportAdapter extends RecyclerView.Adapter<InspectionReportAdapter.ViewHolder> {
 
     public interface OnItemClickListener {
-        void onItemClick(String businessId);
+        void onItemClick(String businessId, String restaurantName);
     }
 
     private final OnItemClickListener listener;
@@ -105,7 +105,7 @@ public class InspectionReportAdapter extends RecyclerView.Adapter<InspectionRepo
         holder.tvDate.setText("Inspection Date: " + report.getDate());
 
         holder.itemView.setOnClickListener(v -> {
-            listener.onItemClick(report.getBusiness_id());
+            listener.onItemClick(report.getBusiness_id(), report.getRestaurant_name());
         });
     }
     //get the size of the list

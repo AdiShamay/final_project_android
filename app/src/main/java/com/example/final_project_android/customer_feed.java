@@ -51,12 +51,13 @@ public class customer_feed extends Fragment {
         rvRestaurants.setLayoutManager(new LinearLayoutManager(getContext()));
 
         // Create the adapter and define the click behavior
-        InspectionReportAdapter adapter = new InspectionReportAdapter(businessId -> {
+        InspectionReportAdapter adapter = new InspectionReportAdapter((businessId,restaurantName) -> {
             // Navigate to the reviews page using the ID from nav_graph
             Bundle bundle = new Bundle();
 
             bundle.putString("filterType", "business_id");
             bundle.putString("filterValue", businessId);
+            bundle.putString("restaurant_name", restaurantName);
 
             Navigation.findNavController(view).navigate(R.id.action_customer_feed2_to_restaurant_reviews2, bundle);
         });
