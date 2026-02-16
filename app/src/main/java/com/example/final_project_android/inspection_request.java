@@ -34,7 +34,7 @@ public class inspection_request extends Fragment {
     // UI Components
     private TextView tvStatus, tvMessage;
     private ImageView ivIcon;
-    private Button btnAction;
+    private Button btnAction,btnDelete;
     private EditText etDate;
     private com.google.android.material.textfield.TextInputLayout dateLayout;
 
@@ -55,9 +55,13 @@ public class inspection_request extends Fragment {
         tvStatus = view.findViewById(R.id.tv_request_status);
         tvMessage = view.findViewById(R.id.tv_eligibility_message);
         btnAction = view.findViewById(R.id.btn_action_request);
+        btnDelete = view.findViewById(R.id.Delete_request);
         ivIcon = view.findViewById(R.id.iv_status_icon);
         etDate = view.findViewById(R.id.et_requested_date);
         ImageButton btnReturn = view.findViewById(R.id.btn_return);
+
+        //making the button live only if there is an open request
+        btnDelete.setVisibility(View.GONE);
         // Layout to handle icon clicks
         dateLayout = view.findViewById(R.id.textInputLayoutDate);
         // Initialize Firebase
@@ -207,8 +211,13 @@ public class inspection_request extends Fragment {
             btnAction.setEnabled(false);
             btnAction.setBackgroundColor(0xFFB0BEC5); // Neutral gray
 
+            //there is a request so the delete button is now live
+            btnDelete.setVisibility(View.VISIBLE);
+            btnDelete.setOnClickListener(v -> deleteActiveRequest());
+
         } else {
-            // No active request found, proceed to check if the restaurant is eligible to create one
+            // No active request found,Hide delete button and proceed to check if the restaurant is eligible to create one
+            btnDelete.setVisibility(View.GONE);
             checkEligibility();
         }
     }
@@ -350,5 +359,17 @@ public class inspection_request extends Fragment {
         } catch (ParseException e) {
             return false;
         }
+    }
+
+    private void deleteActiveRequest() {
+        if (activeRequest == null || activeRequest.getRequest_uid() == null) return;
+
+        dbRef.child("inspection_requests").child(activeRequest.getRequest_uid())
+                .removeValue()
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(getContext(), "Request cancelled successfully", Toast.LENGTH_SHORT).show();
+                    checkExistingRequests(); // Refresh UI to allow new request
+                })
+                .addOnFailureListener(e -> Toast.makeText(getContext(), "Failed to cancel request", Toast.LENGTH_SHORT).show());
     }
 }

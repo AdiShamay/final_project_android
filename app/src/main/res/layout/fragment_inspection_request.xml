@@ -93,5 +93,12 @@
             android:backgroundTint="#B0BEC5"
             android:enabled="false" />
 
+        <Button
+            android:id="@+id/Delete_request"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#CC2929"
+            android:text="Delete request" />
+
     </LinearLayout>
 </LinearLayout>
