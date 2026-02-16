@@ -21,6 +21,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
+import java.util.Date;
+import java.util.Locale;
+
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
@@ -64,22 +71,39 @@ public class customer_feed extends Fragment {
         inspectionsRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                List<Inspection_Report_class> inspectionList = new ArrayList<>();
+                // Group inspections by Business ID and keep only the latest one
+                Map<String, Inspection_Report_class> latestInspectionsMap = new HashMap<>();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
-                // check all inspections
                 for (DataSnapshot ds : snapshot.getChildren()) {
-                    // Automatic conversion of JSON from the cloud to Java object
                     Inspection_Report_class report = ds.getValue(Inspection_Report_class.class);
-
                     if (report != null) {
-                        inspectionList.add(report);
+                        String businessId = report.getBusiness_id();
+
+                        if (!latestInspectionsMap.containsKey(businessId)) {
+                            latestInspectionsMap.put(businessId, report);
+                        } else {
+                            try {
+                                // Compare the dates
+                                Date existingDate = sdf.parse(latestInspectionsMap.get(businessId).getDate());
+                                Date newDate = sdf.parse(report.getDate());
+
+                                // If the current report date is AFTER the stored one, update the Map
+                                if (newDate != null && existingDate != null && newDate.after(existingDate)) {
+                                    latestInspectionsMap.put(businessId, report);
+                                }
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                        }
                     }
                 }
 
-                //Update the adapter with the list from Firebase
-                adapter.setInspections(inspectionList);
+                // Convert Map values to List for the adapter
+                List<Inspection_Report_class> inspectionList = new ArrayList<>(latestInspectionsMap.values());
 
-                //Default Sort: Ensure the list is sorted by Date (Newest First) initially
+                // Update adapter and explicitly call sort to ensure correct UI order
+                adapter.setInspections(inspectionList);
                 adapter.sortByDate();
             }
 
