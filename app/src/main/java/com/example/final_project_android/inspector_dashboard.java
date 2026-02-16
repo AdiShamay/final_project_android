@@ -221,22 +221,56 @@ public class inspector_dashboard extends Fragment {
             tvNextAddress.setText(request.getAddress());
             tvNextTime.setText(request.getRequested_date() + ", " + request.getInspection_time());
 
-            // Set Action for the "Start" button inside the card
-            btnStartReportCard.setOnClickListener(v -> {
-                // Pass relevant data to the new inspection form
-                Bundle bundle = new Bundle();
-                bundle.putString("restaurant_id", request.getBusiness_id());
-                bundle.putString("restaurant_name", request.getRes_name());
-                bundle.putString("restaurant_address", request.getAddress());
-                bundle.putString("inspector_id", currentInspectorId);
+            //checking if the time for the inspetion has arrived
+            boolean isTimeValid= isWithinTimeMargin(request.getRequested_date(),request.getInspection_time());
 
-                Navigation.findNavController(v).navigate(R.id.action_inspector_dashboard2_to_new_inspection_form2, bundle);
-            });
+            if(isTimeValid) {
+                // Button is active and colored
+                btnStartReportCard.setEnabled(true);
+                btnStartReportCard.setAlpha(1.0f);
+                btnStartReportCard.setBackgroundColor(android.graphics.Color.parseColor("#009688"));
 
-        } else {
+                // Set Action for the "Start" button inside the card
+                btnStartReportCard.setOnClickListener(v -> {
+                    // Pass relevant data to the new inspection form
+                    Bundle bundle = new Bundle();
+                    bundle.putString("restaurant_id", request.getBusiness_id());
+                    bundle.putString("restaurant_name", request.getRes_name());
+                    bundle.putString("restaurant_address", request.getAddress());
+                    bundle.putString("inspector_id", currentInspectorId);
+
+                    Navigation.findNavController(v).navigate(R.id.action_inspector_dashboard2_to_new_inspection_form2, bundle);
+                });
+            }else {
+                // Button is "dead": disabled and faded out
+                btnStartReportCard.setEnabled(false);
+                btnStartReportCard.setAlpha(0.5f);
+                btnStartReportCard.setBackgroundColor(android.graphics.Color.GRAY);
+
+                // Set a click listener even on the disabled button to show the explanation toast
+                cardNextInspection.setOnClickListener(v -> {
+                    Toast.makeText(getContext(), "Inspection available only on the set time" + request.getRequested_date(), Toast.LENGTH_LONG).show();
+                });
+            }
+        }else{
             // Hide Card, Show "No Inspection" message
             cardNextInspection.setVisibility(View.GONE);
             tvNoInspection.setVisibility(View.VISIBLE);
+        }
+    }
+    private boolean isWithinTimeMargin(String scheduledDate, String scheduledTime) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
+            Date scheduled = sdf.parse(scheduledDate + " " + scheduledTime);
+            long now = System.currentTimeMillis();
+            long schedMillis = scheduled.getTime();
+
+            // 30 minutes = 1,800,000 milliseconds
+            long margin = 30 * 60 * 1000;
+
+            return Math.abs(now - schedMillis) <= margin;
+        } catch (Exception e) {
+            return false;
         }
     }
 }
