@@ -364,6 +364,12 @@ public class inspection_request extends Fragment {
     private void deleteActiveRequest() {
         if (activeRequest == null || activeRequest.getRequest_uid() == null) return;
 
+        //Check if the inspection is scheduled for tomorrow
+       if (isDateTooLate(activeRequest.getRequested_date())) {
+            Toast.makeText(getContext(), "Cannot delete the scheduled inspection.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         dbRef.child("inspection_requests").child(activeRequest.getRequest_uid())
                 .removeValue()
                 .addOnSuccessListener(aVoid -> {
@@ -371,5 +377,31 @@ public class inspection_request extends Fragment {
                     checkExistingRequests(); // Refresh UI to allow new request
                 })
                 .addOnFailureListener(e -> Toast.makeText(getContext(), "Failed to cancel request", Toast.LENGTH_SHORT).show());
+    }
+
+    private boolean isDateTooLate(String dateStr) {
+        try {
+            // Use the format found in your inspection_requests: dd/MM/yyyy
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+            Date reqDate = sdf.parse(dateStr);
+
+            // Get "Today" and set time to midnight to ignore hours/minutes
+            Calendar cal = Calendar.getInstance();
+            cal.set(Calendar.HOUR_OF_DAY, 0);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+            cal.set(Calendar.MILLISECOND, 0);
+
+            // Calculate the threshold (Tomorrow at midnight)
+            cal.add(Calendar.DAY_OF_YEAR, 1);
+            Date tomorrowMidnight = cal.getTime();
+
+            // If the inspection date is BEFORE or EQUAL to tomorrow at midnight,
+            // it means the inspection is either today or tomorrow.
+            return reqDate != null && !reqDate.after(tomorrowMidnight);
+
+        } catch (ParseException e) {
+            return false;
+        }
     }
 }
