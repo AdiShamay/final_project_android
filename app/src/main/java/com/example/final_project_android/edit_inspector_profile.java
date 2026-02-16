@@ -54,7 +54,26 @@ public class edit_inspector_profile extends Fragment {
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         resRef = FirebaseDatabase.getInstance().getReference("inspectors");
 
-        loadProfileData();
+        // Check if data was passed via Bundle to avoid extra DB calls
+        if (getArguments() != null) {
+            String passedName = getArguments().getString("name");
+            String passedEmail = getArguments().getString("email");
+            String passedCompany = getArguments().getString("company");
+            String passedLicId = getArguments().getString("license_id");
+            String passedKey = getArguments().getString("db_key");
+
+            // Populate UI immediately
+            etName.setText(passedName);
+            etEmail.setText(passedEmail);
+            etCompany.setText(passedCompany);
+            etLicId.setText(passedLicId);
+
+            // Set the tag needed for the save function
+            etLicId.setTag(passedKey);
+        } else {
+            // Load from DB if no arguments were passed
+            loadProfileData();
+        }
 
         // Find views
         Button btnSave = view.findViewById(R.id.btn_insp_save);

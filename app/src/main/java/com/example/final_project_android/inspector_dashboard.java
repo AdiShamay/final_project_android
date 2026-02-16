@@ -38,6 +38,7 @@ public class inspector_dashboard extends Fragment {
     private Button btnStartReportCard;
     private String currentInspectorId;
     private String currentInspectorName;
+    private Inspector_class currentInspector;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -65,7 +66,14 @@ public class inspector_dashboard extends Fragment {
 
         Button btnSchedule = view.findViewById(R.id.btn_view_schedule);
         btnSchedule.setOnClickListener(v -> {
-            Navigation.findNavController(v).navigate(R.id.action_inspector_dashboard2_to_inspector_schedule2);
+            if (currentInspectorId != null) {
+                Bundle bundle = new Bundle();
+                bundle.putString("inspector_id", currentInspectorId);
+
+                Navigation.findNavController(v).navigate(R.id.action_inspector_dashboard2_to_inspector_schedule2, bundle);
+            } else {
+                Toast.makeText(getContext(), "Loading data...", Toast.LENGTH_SHORT).show();
+            }
         });
 
         Button btnHistory = view.findViewById(R.id.btn_inspector_history);
@@ -76,6 +84,7 @@ public class inspector_dashboard extends Fragment {
                 bundle.putString("filterType", "inspector_id");
                 bundle.putString("filterValue", currentInspectorId);
                 bundle.putString("inspector_name", currentInspectorName);
+                bundle.putString("inspector_id", currentInspectorId);
                 Navigation.findNavController(v).navigate(R.id.action_inspector_dashboard2_to_restaurant_reviews2, bundle);
             } else {
                 Toast.makeText(getContext(), "Please wait, loading data...", Toast.LENGTH_SHORT).show();
@@ -84,7 +93,19 @@ public class inspector_dashboard extends Fragment {
 
         Button btnEdit = view.findViewById(R.id.btn_inspector_edit_profile);
         btnEdit.setOnClickListener(v -> {
-            Navigation.findNavController(v).navigate(R.id.action_inspector_dashboard2_to_edit_inspector_profile2);
+            if (currentInspector != null) {
+                Bundle bundle = new Bundle();
+                // Pass all profile fields to the edit screen
+                bundle.putString("name", currentInspector.getFull_name());
+                bundle.putString("email", currentInspector.getEmail());
+                bundle.putString("company", currentInspector.getCompany_name());
+                bundle.putString("license_id", currentInspector.getLicence_number());
+                bundle.putString("db_key", currentInspector.getID());
+
+                Navigation.findNavController(v).navigate(R.id.action_inspector_dashboard2_to_edit_inspector_profile2, bundle);
+            } else {
+                Toast.makeText(getContext(), "Loading profile...", Toast.LENGTH_SHORT).show();
+            }
         });
 
         Button btnViewAll = view.findViewById(R.id.btn_view_all_inspections);
@@ -117,6 +138,7 @@ public class inspector_dashboard extends Fragment {
                             tvGreeting.setText("Hello, " + inspector.getFull_name());
                             currentInspectorId = inspector.getID();
                             currentInspectorName = inspector.getFull_name();
+                            currentInspector = inspector;
 
                             // Find the closest upcoming inspection using the Inspector's ID
                             findNextInspection(inspector.getID());
@@ -206,6 +228,7 @@ public class inspector_dashboard extends Fragment {
                 bundle.putString("restaurant_id", request.getBusiness_id());
                 bundle.putString("restaurant_name", request.getRes_name());
                 bundle.putString("restaurant_address", request.getAddress());
+                bundle.putString("inspector_id", currentInspectorId);
 
                 Navigation.findNavController(v).navigate(R.id.action_inspector_dashboard2_to_new_inspection_form2, bundle);
             });

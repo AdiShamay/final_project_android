@@ -67,9 +67,6 @@ public class new_inspection_form extends Fragment {
         Button btnSubmit = view.findViewById(R.id.btn_submit_inspection);
         ImageButton btnReturn = view.findViewById(R.id.btn_return);
 
-        // Fetch the inspector ID based on current authentication
-        loadCurrentInspectorId();
-
         // Retrieve the data passed from the Dashboard
         String passedName = "";
         String passedId = "";
@@ -78,6 +75,8 @@ public class new_inspection_form extends Fragment {
             passedName = getArguments().getString("restaurant_name", "");
             passedId = getArguments().getString("restaurant_id", "");
             restaurantAddress = getArguments().getString("restaurant_address", "");
+            // Retrieve the verified inspector ID directly from the arguments
+            inspectorId = getArguments().getString("inspector_id", "");
         }
 
         // Set the text and ensure they are locked
@@ -154,30 +153,6 @@ public class new_inspection_form extends Fragment {
         });
 
         return view;
-    }
-
-    /**
-     * Retrieves the official inspector ID from the database using the authenticated email.
-     */
-    private void loadCurrentInspectorId() {
-        if (mAuth.getCurrentUser() == null) return;
-        String userEmail = mAuth.getCurrentUser().getEmail();
-
-        DatabaseReference inspectorsRef = database.getReference("inspectors");
-        inspectorsRef.orderByChild("email").equalTo(userEmail).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@androidx.annotation.NonNull DataSnapshot snapshot) {
-                for (DataSnapshot ds : snapshot.getChildren()) {
-                    Inspector_class inspector = ds.getValue(Inspector_class.class);
-                    if (inspector != null) {
-                        inspectorId = inspector.getID();
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@androidx.annotation.NonNull DatabaseError error) { }
-        });
     }
 
     // Function to write report object to Firebase

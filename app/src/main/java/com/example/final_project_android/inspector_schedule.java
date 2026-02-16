@@ -35,6 +35,7 @@ public class inspector_schedule extends Fragment {
     private ScheduledInspectionsAdapter adapter;
     private List<Inspection_Request_class> scheduledList;
     private SimpleDateFormat sdf;
+    private String currentInspectorId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -48,6 +49,10 @@ public class inspector_schedule extends Fragment {
         // Initialize data structures
         scheduledList = new ArrayList<>();
         sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+
+        if (getArguments() != null) {
+            currentInspectorId = getArguments().getString("inspector_id");
+        }
 
         rvList.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -66,40 +71,34 @@ public class inspector_schedule extends Fragment {
         });
         rvList.setAdapter(adapter);
 
-        // Load schedule from Firebase
-        loadMyUpcomingSchedule();
+        // Check if inspector ID was passed from Dashboard
+        if (getArguments() != null) {
+            String inspectorId = getArguments().getString("inspector_id");
+            if (inspectorId != null) {
+                // Load schedule directly using the ID
+                fetchRequestsForInspector(inspectorId);
+            }
+        } else {
+            // Error
+            Toast.makeText(getContext(), "Error: Inspector ID not found.", Toast.LENGTH_SHORT).show();
+        }
 
         // Navigation logic
-        btnAddSchedule.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.action_inspector_schedule2_to_add_to_schedule));
-        btnReturn.setOnClickListener(v -> Navigation.findNavController(v).popBackStack());
+
+        btnAddSchedule.setOnClickListener(v -> {
+            if (currentInspectorId != null) {
+                Bundle bundle = new Bundle();
+                bundle.putString("inspector_id", currentInspectorId);
+                Navigation.findNavController(v).navigate(R.id.action_inspector_schedule2_to_add_to_schedule, bundle);
+            } else {
+                Navigation.findNavController(v).navigate(R.id.action_inspector_schedule2_to_add_to_schedule);
+            }
+        });
+
+        btnReturn.setOnClickListener(v ->
+                Navigation.findNavController(v).popBackStack());
 
         return view;
-    }
-
-    // Identifies the inspector by email and loads their data
-    private void loadMyUpcomingSchedule() {
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (currentUser == null) return;
-
-        String userEmail = currentUser.getEmail();
-        DatabaseReference inspectorsRef = FirebaseDatabase.getInstance().getReference("inspectors");
-
-        inspectorsRef.orderByChild("email").equalTo(userEmail).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    for (DataSnapshot ds : snapshot.getChildren()) {
-                        Inspector_class inspector = ds.getValue(Inspector_class.class);
-                        if (inspector != null) {
-                            fetchRequestsForInspector(inspector.getID());
-                        }
-                        return;
-                    }
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {}
-        });
     }
 
     // Fetches future inspections for the specific inspector ID

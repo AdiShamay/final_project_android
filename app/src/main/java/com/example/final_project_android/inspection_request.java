@@ -45,6 +45,7 @@ public class inspection_request extends Fragment {
     // Data objects
     private Restaurant_class currentRestaurant;
     private Inspection_Request_class activeRequest;
+    private String passedBusinessId = "";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -61,9 +62,17 @@ public class inspection_request extends Fragment {
         dateLayout = view.findViewById(R.id.textInputLayoutDate);
         // Initialize Firebase
         dbRef = FirebaseDatabase.getInstance().getReference();
-        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-            currentUserEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-            loadRestaurantData(); // Start the logic chain
+
+        // Get the Business ID from the Bundle
+        if (getArguments() != null) {
+            passedBusinessId = getArguments().getString("business_id");
+        }
+
+        // Load data ONLY if we have the ID
+        if (passedBusinessId != null && !passedBusinessId.isEmpty()) {
+            loadRestaurantData();
+        } else {
+            Toast.makeText(getContext(), "Error: Business ID missing", Toast.LENGTH_SHORT).show();
         }
 
         // 1. Disable keyboard input
@@ -108,29 +117,35 @@ public class inspection_request extends Fragment {
         return view;
     }
 
-    // Step 1: Find Restaurant by Email
+    // Query the database by the passed Business ID
     private void loadRestaurantData() {
-        dbRef.child("restaurants").orderByChild("email").equalTo(currentUserEmail)
+        DatabaseReference restRef = FirebaseDatabase.getInstance().getReference("restaurants");
+
+        // Search by "business_id"
+        restRef.orderByChild("business_id").equalTo(passedBusinessId)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.exists()) {
+                            // Loop to find the match (should be only one)
                             for (DataSnapshot child : snapshot.getChildren()) {
                                 currentRestaurant = child.getValue(Restaurant_class.class);
                             }
-                            // Once we have the restaurant, check for existing requests
+                            // Continue to next step
                             checkExistingRequests();
+                        } else {
+                            Toast.makeText(getContext(), "Restaurant not found in DB", Toast.LENGTH_SHORT).show();
                         }
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
-                        Toast.makeText(getContext(), "Error loading data", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Connection Error", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
 
-    // Step 2: Check for ANY active requests for this Business ID
+    // Check for ANY active requests for this Business ID
     private void checkExistingRequests() {
         if (currentRestaurant == null) return;
 
@@ -161,7 +176,7 @@ public class inspection_request extends Fragment {
                 });
     }
 
-    // Step 3: Logic Brain (Update UI States)
+    // Logic Brain (Update UI States)
     private void updateUI() {
         // Handle cases where an active request exists in the system
         if (activeRequest != null) {
@@ -198,7 +213,7 @@ public class inspection_request extends Fragment {
         }
     }
 
-    // Step 4: Check 4 Month Rule
+    // Check 4 Month Rule
     private void checkEligibility() {
         String lastDateStr = currentRestaurant.getDate(); // Assuming format YYYY-MM-DD or DD/MM/YYYY
 
@@ -267,7 +282,7 @@ public class inspection_request extends Fragment {
         btnAction.setBackgroundColor(0xFF4CAF50);
     }
 
-    // Step 5: Submit to DB
+    // Submit to DB
     private void submitRequest() {
         String dateInput = etDate.getText().toString().trim();
 

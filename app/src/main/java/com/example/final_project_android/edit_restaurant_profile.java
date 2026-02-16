@@ -54,7 +54,26 @@ public class edit_restaurant_profile extends Fragment {
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         resRef = FirebaseDatabase.getInstance().getReference("restaurants");
 
-        loadProfileData();
+        // Check if data was passed via Bundle to avoid extra DB calls
+        if (getArguments() != null) {
+            String passedName = getArguments().getString("res_name");
+            String passedEmail = getArguments().getString("email");
+            String passedAddress = getArguments().getString("address");
+            String passedTaxId = getArguments().getString("business_id");
+            String passedKey = getArguments().getString("db_key");
+
+            // Populate UI immediately from the bundle
+            etName.setText(passedName);
+            etEmail.setText(passedEmail);
+            etAddress.setText(passedAddress);
+            etTaxId.setText(passedTaxId);
+
+            // Store the database key in the tag for the save function
+            etTaxId.setTag(passedKey);
+        } else {
+            // Load from DB if no arguments were passed
+            loadProfileData();
+        }
 
         // Handle the Save button click
         Button btnSave = view.findViewById(R.id.btn_save_changes);

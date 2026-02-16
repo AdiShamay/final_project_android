@@ -32,6 +32,7 @@ public class add_to_schedule extends Fragment {
     private RecyclerView recyclerView;
     private AvailableRequestsAdapter adapter;
     private List<Inspection_Request_class> availableList;
+    private String currentInspectorId = "";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -44,6 +45,10 @@ public class add_to_schedule extends Fragment {
         // Initialize list
         availableList = new ArrayList<>();
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        if (getArguments() != null) {
+            currentInspectorId = getArguments().getString("inspector_id", "");
+        }
 
         // Setup adapter with Time Validation Logic
         adapter = new AvailableRequestsAdapter(availableList, (request, time) -> {
@@ -124,46 +129,30 @@ public class add_to_schedule extends Fragment {
         });
     }
 
+    // Assigns the inspector to the request using the ID passed from the previous screen
     private void assignInspectorToRequest(Inspection_Request_class request, String time) {
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        if (currentUser == null) {
-            Toast.makeText(getContext(), "System Error: Please relogin", Toast.LENGTH_SHORT).show();
+        // ensure we received the ID
+        if (currentInspectorId == null || currentInspectorId.isEmpty()) {
+            Toast.makeText(getContext(), "Error: Inspector ID missing.", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        String userEmail = currentUser.getEmail();
-        DatabaseReference inspectorsRef = FirebaseDatabase.getInstance().getReference("inspectors");
+        // Set the ID and Time directly
+        request.setInspector_id(currentInspectorId);
+        request.setInspection_time(time);
 
-        inspectorsRef.orderByChild("email").equalTo(userEmail).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    for (DataSnapshot ds : snapshot.getChildren()) {
-                        Inspector_class inspector = ds.getValue(Inspector_class.class);
-
-                        if (inspector != null) {
-                            request.setInspector_id(inspector.getID());
-                            request.setInspection_time(time);
-
-                            DatabaseReference requestRef = FirebaseDatabase.getInstance().getReference("inspection_requests");
-                            requestRef.child(request.getRequest_uid()).setValue(request)
-                                    .addOnSuccessListener(aVoid -> {
-                                        Toast.makeText(getContext(), "Added to schedule", Toast.LENGTH_SHORT).show();
-                                    })
-                                    .addOnFailureListener(e -> {
-                                        Toast.makeText(getContext(), "Connection Error", Toast.LENGTH_SHORT).show();
-                                    });
-                        }
-                        break;
-                    }
-                } else {
-                    System.out.println("Debug: Inspector email not found");
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {}
-        });
+        // Update Firebase
+        DatabaseReference requestRef = FirebaseDatabase.getInstance().getReference("inspection_requests");
+        requestRef.child(request.getRequest_uid()).setValue(request)
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(getContext(), "Added to schedule", Toast.LENGTH_SHORT).show();
+                    // Navigate back to the schedule immediately
+                    Navigation.findNavController(getView()).popBackStack();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(getContext(), "Connection Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
     }
 
     // Helper method to validate time if date is today

@@ -22,6 +22,7 @@ import androidx.annotation.NonNull;
 public class restaurant_dashboard extends Fragment {
 
     private String currentBusinessId = "";
+    private Restaurant_class currentRestaurant;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -49,6 +50,7 @@ public class restaurant_dashboard extends Fragment {
                         if (restaurant != null) {
                             // Store the business ID for the history button logic
                             currentBusinessId = restaurant.getBusiness_id();
+                            currentRestaurant = restaurant;
 
                             // Update the greeting text with the restaurant's name
                             tvGreeting.setText("Hello, " + restaurant.getRes_name());
@@ -103,8 +105,19 @@ public class restaurant_dashboard extends Fragment {
 
         // Request Inspection
         btnRequestNew.setOnClickListener(v -> {
-            Navigation.findNavController(v)
-                    .navigate(R.id.action_restaurant_dashboard2_to_inspection_request2);
+            // Check if we have the ID
+            if (currentBusinessId != null && !currentBusinessId.isEmpty()) {
+                Bundle bundle = new Bundle();
+
+                // Pass only the unique Business ID string
+                bundle.putString("business_id", currentBusinessId);
+
+                Navigation.findNavController(v)
+                        .navigate(R.id.action_restaurant_dashboard2_to_inspection_request2, bundle);
+            } else {
+                // Handle case where data hasn't loaded yet
+                android.widget.Toast.makeText(getContext(), "Loading data, please wait...", android.widget.Toast.LENGTH_SHORT).show();
+            }
         });
 
         // View History
@@ -126,8 +139,19 @@ public class restaurant_dashboard extends Fragment {
 
         // Edit Profile
         btnEdit.setOnClickListener(v -> {
-            Navigation.findNavController(v)
-                    .navigate(R.id.action_restaurant_dashboard2_to_edit_restaurant_profile2);
+            if (currentRestaurant != null) {
+                Bundle bundle = new Bundle();
+                // Pass all profile fields to the edit screen
+                bundle.putString("res_name", currentRestaurant.getRes_name());
+                bundle.putString("email", currentRestaurant.getEmail());
+                bundle.putString("address", currentRestaurant.getAddress());
+                bundle.putString("business_id", currentRestaurant.getBusiness_id());
+                bundle.putString("db_key", currentRestaurant.getBusiness_id());
+
+                Navigation.findNavController(v).navigate(R.id.action_restaurant_dashboard2_to_edit_restaurant_profile2, bundle);
+            } else {
+                android.widget.Toast.makeText(getContext(), "Loading profile...", android.widget.Toast.LENGTH_SHORT).show();
+            }
         });
 
         return view;
