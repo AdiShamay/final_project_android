@@ -21,6 +21,8 @@ import androidx.annotation.NonNull;
  */
 public class restaurant_dashboard extends Fragment {
 
+    private String currentBusinessId = "";
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_restaurant_dashboard, container, false);
@@ -45,6 +47,9 @@ public class restaurant_dashboard extends Fragment {
                         Restaurant_class restaurant = child.getValue(Restaurant_class.class);
 
                         if (restaurant != null) {
+                            // Store the business ID for the history button logic
+                            currentBusinessId = restaurant.getBusiness_id();
+
                             // Update the greeting text with the restaurant's name
                             tvGreeting.setText("Hello, " + restaurant.getRes_name());
 
@@ -104,8 +109,19 @@ public class restaurant_dashboard extends Fragment {
 
         // View History
         btnHistory.setOnClickListener(v -> {
-            Navigation.findNavController(v)
-                    .navigate(R.id.action_restaurant_dashboard2_to_restaurant_reviews2);
+            if (currentBusinessId != null && !currentBusinessId.isEmpty()) {
+                Bundle bundle = new Bundle();
+                // Pass "business_id" as type so the adapter knows how to filter
+                bundle.putString("filterType", "business_id");
+                // Pass the actual license number we fetched earlier
+                bundle.putString("filterValue", currentBusinessId);
+
+                Navigation.findNavController(v)
+                        .navigate(R.id.action_restaurant_dashboard2_to_restaurant_reviews2, bundle);
+            } else {
+                // Handle case where data hasn't loaded yet
+                android.widget.Toast.makeText(getContext(), "Loading data, please wait...", android.widget.Toast.LENGTH_SHORT).show();
+            }
         });
 
         // Edit Profile
