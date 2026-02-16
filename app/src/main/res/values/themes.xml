@@ -3,6 +3,10 @@
     <style name="Base.Theme.Final_project_android" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/blue</item> <item name="colorPrimaryVariant">@color/green</item>
+        <item name="colorOnPrimary">@color/white</item>
+
+        <item name="android:statusBarColor">@color/blue</item>
     </style>
 
     <style name="Theme.Final_project_android" parent="Base.Theme.Final_project_android" />

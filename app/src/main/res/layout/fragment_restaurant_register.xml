@@ -1,7 +1,8 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -28,10 +29,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:text="Restaurant Registration"
-                android:textSize="22sp"
+                android:layout_centerInParent="true"
+                android:text="New Restaurant Registration"
+                android:textSize="20sp"
                 android:textStyle="bold" />
         </RelativeLayout>
 
@@ -49,17 +49,17 @@
             android:inputType="textEmailAddress" />
 
         <EditText
+            android:id="@+id/res_address_reg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Full Address" />
+
+        <EditText
             android:id="@+id/res_id_reg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Business ID / Tax Number"
             android:inputType="number" />
-
-        <EditText
-            android:id="@+id/res_address_reg"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Full Address" />
 
         <EditText
             android:id="@+id/res_password_reg"
@@ -75,7 +75,7 @@
             android:layout_marginTop="20dp"
             android:backgroundTint="#2196F3"
             android:text="Submit Registration"
-            android:textColorLink="#2196F3"
+            android:textColorLink="@color/blue"
             app:rippleColor="#4CAF50" />
 
     </LinearLayout>

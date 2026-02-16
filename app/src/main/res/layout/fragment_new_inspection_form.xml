@@ -141,7 +141,7 @@
         android:id="@+id/btn_submit_inspection"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:backgroundTint="#009688"
+        android:backgroundTint="@color/blue"
         android:text="Submit Final Report"
         android:textSize="16sp" />
 

@@ -88,7 +88,7 @@ public class restaurant_dashboard extends Fragment {
         Button btnLogout = view.findViewById(R.id.btn_logout);
         Button btnRequestNew = view.findViewById(R.id.btn_request_inspection);
         Button btnHistory = view.findViewById(R.id.btn_view_my_history);
-        Button btnEdit = view.findViewById(R.id.btn_edit_details);
+        Button btnEdit = view.findViewById(R.id.btn_restaurant_edit_profile);
 
         // Logout and return to home screen
         btnLogout.setOnClickListener(v -> {

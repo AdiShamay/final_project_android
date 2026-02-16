@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="20dp">
+    android:padding="20dp"
+    android:background="@color/white">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -56,17 +57,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:backgroundTint="#009688"
+            android:backgroundTint="@color/blue"
             android:text="Login" />
 
         <TextView
             android:id="@+id/tv_go_to_inspector_register"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="New Inspector? Register here"
+            android:layout_marginTop="24dp"
+            android:text="Don't have an account? Register here"
             android:textColor="#0000FF"
-            android:textStyle="bold"
-            android:layout_marginTop="24dp" />
+            android:textStyle="bold" />
     </LinearLayout>
 
 </LinearLayout>

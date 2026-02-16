@@ -23,10 +23,10 @@
             android:id="@+id/btn_logout"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
+            android:backgroundTint="#474747"
             android:text="Logout"
-            android:textSize="12sp"
-            android:backgroundTint="#D32F2F"
-            android:layout_alignParentEnd="true" />
+            android:textSize="12sp" />
     </RelativeLayout>
 
     <androidx.cardview.widget.CardView
@@ -79,9 +79,9 @@
     <Button
         android:id="@+id/btn_request_inspection"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
-        android:backgroundTint="#673AB7"
+        android:backgroundTint="@color/green"
         android:text="Manage Inspection Requests" />
 
     <Button
@@ -89,14 +89,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
-        android:backgroundTint="#2196F3"
+        android:backgroundTint="@color/blue"
         android:text="View History" />
 
     <Button
-        android:id="@+id/btn_edit_details"
+        android:id="@+id/btn_restaurant_edit_profile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="#FF9800"
-        android:text="Edit Profile" />
+        android:backgroundTint="#E0E0E0"
+        android:text="Edit Profile"
+        android:textAllCaps="false"
+        android:textColor="#757575"
+        android:textSize="14sp" />
 
 </LinearLayout>

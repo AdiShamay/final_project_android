@@ -67,7 +67,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Accept"
-                android:backgroundTint="#4CAF50"
+                android:backgroundTint="@color/green"
                 android:textColor="#FFFFFF"
                 android:layout_marginStart="8dp"/>
         </LinearLayout>

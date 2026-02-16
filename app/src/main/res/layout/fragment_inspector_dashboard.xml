@@ -26,7 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_alignParentEnd="true"
-            android:backgroundTint="#D32F2F"
+            android:backgroundTint="#474747"
             android:text="Logout"
             android:textSize="12sp" />
     </RelativeLayout>
@@ -122,31 +122,35 @@
             android:id="@+id/btn_view_schedule"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="12dp"
+            android:backgroundTint="@color/green"
             android:text="Schedule" />
 
         <Button
             android:id="@+id/btn_inspector_history"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:backgroundTint="#2196F3"
+            android:layout_marginBottom="12dp"
+            android:backgroundTint="@color/blue"
             android:text="My Past Inspections" />
+
+        <Button
+            android:id="@+id/btn_view_all_inspections"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:backgroundTint="@color/blue"
+            android:text="View All Inspections" />
 
         <Button
             android:id="@+id/btn_inspector_edit_profile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:backgroundTint="#8BC34A"
-            android:text="Edit My Profile" />
-
-        <Button
-            android:id="@+id/btn_view_all_reviews"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="#FF9800"
-            android:text="View Inspections" />
+            android:backgroundTint="#E0E0E0"
+            android:text="Edit Profile"
+            android:textAllCaps="false"
+            android:textColor="#757575"
+            android:textSize="14sp" />
 
     </LinearLayout>
 </LinearLayout>

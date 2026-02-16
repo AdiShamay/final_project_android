@@ -2,38 +2,59 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center"
-    android:padding="20dp">
+    android:padding="20dp"
+    android:background="#F5F5F5">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Sanitation Control App"
-        android:textSize="26sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="40dp" />
+    <ImageView
+        android:id="@+id/iv_logo"
+        android:layout_width="350dp"
+        android:layout_height="350dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/safe_bite_logo"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:contentDescription="SafeBite Logo" />
 
-    <Button
-        android:id="@+id/btn_restaurant"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
-        android:backgroundTint="#03A9F4"
-        android:text="Enter as Restaurant Owner" />
+        android:orientation="vertical"
+        android:layout_marginTop="0dp"
+        android:gravity="center_horizontal">
 
-    <Button
-        android:id="@+id/btn_inspector"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
-        android:backgroundTint="#03A9F4"
-        android:text="Enter as Sanitation Inspector" />
+        <Button
+            android:id="@+id/btn_restaurant"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginBottom="12dp"
+            android:backgroundTint="@color/blue"
+            android:text="Enter as Restaurant"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:textColor="@color/white" />
 
-    <Button
-        android:id="@+id/btn_customer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#03A9F4"
-        android:text="View Restaurant Grades" />
+        <Button
+            android:id="@+id/btn_inspector"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginBottom="12dp"
+            android:backgroundTint="@color/blue"
+            android:text="Enter as Sanitation Inspector"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/btn_customer"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:backgroundTint="@color/blue"
+            android:text="View Restaurant Inspections"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+    </LinearLayout>
 
 </LinearLayout>

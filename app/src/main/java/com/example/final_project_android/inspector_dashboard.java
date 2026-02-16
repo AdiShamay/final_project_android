@@ -87,7 +87,7 @@ public class inspector_dashboard extends Fragment {
             Navigation.findNavController(v).navigate(R.id.action_inspector_dashboard2_to_edit_inspector_profile2);
         });
 
-        Button btnViewAll = view.findViewById(R.id.btn_view_all_reviews);
+        Button btnViewAll = view.findViewById(R.id.btn_view_all_inspections);
         btnViewAll.setOnClickListener(v -> {
             Navigation.findNavController(v).navigate(R.id.action_inspector_dashboard2_to_customer_feed2);
         });

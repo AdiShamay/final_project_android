@@ -49,7 +49,7 @@
             android:layout_height="60dp"
             android:text="+ Add to Schedule"
             android:textSize="18sp"
-            android:backgroundTint="#4CAF50"
+            android:backgroundTint="@color/green"
             android:textColor="#FFFFFF"
             android:layout_marginTop="10dp"/>
 

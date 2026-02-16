@@ -86,14 +86,15 @@
                     android:textSize="10sp"
                     android:textColor="#9E9E9E"
                     android:textStyle="bold"/>
+
                 <TextView
                     android:id="@+id/tv_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="00:00"
+                    android:textColor="@color/blue"
                     android:textSize="16sp"
-                    android:textColor="#2196F3"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
 
@@ -106,24 +107,26 @@
 
             <Button
                 android:id="@+id/btn_reschedule"
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                android:text="Update Time"
-                android:textSize="12sp"
-                android:backgroundTint="#E3F2FD"
-                android:textColor="#1976D2"
                 android:layout_marginEnd="8dp"
-                style="?android:attr/borderlessButtonStyle"/>
+                android:backgroundTint="#E3F2FD"
+                android:text="Update Time"
+                android:textColor="@color/blue"
+                android:textSize="12sp"
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/btn_cancel"
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                android:text="Cancel"
-                android:textSize="12sp"
                 android:backgroundTint="#FFEBEE"
+                android:text="Cancel"
                 android:textColor="#D32F2F"
-                style="?android:attr/borderlessButtonStyle"/>
+                android:textSize="12sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
     </LinearLayout>

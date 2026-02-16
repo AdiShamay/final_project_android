@@ -1,7 +1,8 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -38,38 +39,40 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Full Name"
-            android:layout_marginTop="10dp"/>
+            android:layout_marginTop="10dp"
+            android:text="Full Name" />
 
         <EditText
             android:id="@+id/et_insp_edit_name"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:hint="Full Name" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Email(read only)" />
+            android:text="Email Address (read only)" />
 
         <EditText
             android:id="@+id/et_insp_edit_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:focusable="false"
             android:clickable="false"
-            />
+            android:focusable="false"
+            android:hint="Email Address" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Company / Organization"
-            android:layout_marginTop="10dp"/>
+            android:layout_marginTop="10dp"
+            android:text="Organization / Company" />
 
         <EditText
             android:id="@+id/et_insp_edit_company"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:hint="Organization / Company Name" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -83,7 +86,8 @@
             android:layout_height="wrap_content"
             android:clickable="false"
             android:enabled="false"
-            android:focusable="false" />
+            android:focusable="false"
+            android:hint="Inspector License Number" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -101,9 +105,9 @@
             android:id="@+id/btn_insp_save"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Save Profile"
             android:layout_marginTop="30dp"
-            android:backgroundTint="#4CAF50"/>
+            android:backgroundTint="@color/green"
+            android:text="Save Changes" />
 
     </LinearLayout>
 </ScrollView>

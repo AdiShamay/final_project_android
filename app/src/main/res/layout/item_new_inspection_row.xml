@@ -18,9 +18,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Category Name"
-            android:textColor="#009688"
-            android:textStyle="bold"
-            android:textSize="12sp" />
+            android:textColor="@color/green"
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tv_row_description"
@@ -50,9 +50,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Violation Points:"
-                android:textStyle="bold"
                 android:textColor="#D32F2F"
-                android:textSize="14sp"/>
+                android:textSize="14sp"
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/et_row_points"
@@ -81,9 +81,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
                 android:text="Inspector Remarks:"
-                android:textSize="12sp"
-                android:layout_marginBottom="4dp"/>
+                android:textSize="14sp" />
 
             <EditText
                 android:id="@+id/et_row_comments"
