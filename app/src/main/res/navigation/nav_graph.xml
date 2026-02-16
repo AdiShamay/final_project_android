@@ -24,7 +24,7 @@
         android:label="restaurant_login" >
         <action
             android:id="@+id/action_restaurant_login_to_restaurant_register2"
-            app:destination="@id/restaurant_register2" />
+            app:destination="@id/restaurant_register" />
         <action
             android:id="@+id/action_restaurant_login_to_restaurant_dashboard2"
             app:destination="@id/restaurant_dashboard2" />
@@ -59,7 +59,7 @@
             app:destination="@id/inspector_login" />
     </fragment>
     <fragment
-        android:id="@+id/restaurant_register2"
+        android:id="@+id/restaurant_register"
         android:name="com.example.final_project_android.restaurant_register"
         android:label="restaurant_register" >
         <action
@@ -72,19 +72,19 @@
         android:label="inspector_dashboard" >
         <action
             android:id="@+id/action_inspector_dashboard2_to_inspector_schedule2"
-            app:destination="@id/inspector_schedule2" />
+            app:destination="@id/inspector_schedule" />
         <action
             android:id="@+id/action_inspector_dashboard2_to_new_inspection_form2"
-            app:destination="@id/new_inspection_form2" />
+            app:destination="@id/new_inspection_form" />
         <action
             android:id="@+id/action_inspector_dashboard2_to_edit_inspector_profile2"
-            app:destination="@id/edit_inspector_profile2" />
+            app:destination="@id/edit_inspector_profile" />
         <action
             android:id="@+id/action_inspector_dashboard2_to_customer_feed2"
             app:destination="@id/customer_feed2" />
         <action
             android:id="@+id/action_inspector_dashboard2_to_restaurant_reviews2"
-            app:destination="@id/restaurant_reviews2" />
+            app:destination="@id/filtered_inspections" />
         <action
             android:id="@+id/action_inspector_dashboard2_to_home2"
             app:destination="@id/home2"
@@ -97,7 +97,7 @@
         android:label="restaurant_dashboard" >
         <action
             android:id="@+id/action_restaurant_dashboard2_to_restaurant_reviews2"
-            app:destination="@id/restaurant_reviews2" />
+            app:destination="@id/filtered_inspections" />
         <action
             android:id="@+id/action_restaurant_dashboard2_to_inspection_request2"
             app:destination="@id/inspection_request2" />
@@ -119,34 +119,34 @@
         android:label="customer_feed" >
         <action
             android:id="@+id/action_customer_feed2_to_restaurant_reviews2"
-            app:destination="@id/restaurant_reviews2" />
+            app:destination="@id/filtered_inspections" />
     </fragment>
     <fragment
         android:id="@+id/edit_restaurant_profile2"
         android:name="com.example.final_project_android.edit_restaurant_profile"
         android:label="edit_restaurant_profile" />
     <fragment
-        android:id="@+id/restaurant_reviews2"
+        android:id="@+id/filtered_inspections"
         android:name="com.example.final_project_android.filtered_inspections"
-        android:label="restaurant_reviews" >
+        android:label="filtered_inspections">
         <action
             android:id="@+id/action_restaurant_reviews2_to_review_details2"
-            app:destination="@id/review_details2" />
+            app:destination="@id/inspection_details" />
     </fragment>
     <fragment
         android:id="@+id/inspection_request2"
         android:name="com.example.final_project_android.inspection_request"
         android:label="inspection_request" />
     <fragment
-        android:id="@+id/edit_inspector_profile2"
+        android:id="@+id/edit_inspector_profile"
         android:name="com.example.final_project_android.edit_inspector_profile"
         android:label="edit_inspector_profile" />
     <fragment
-        android:id="@+id/new_inspection_form2"
+        android:id="@+id/new_inspection_form"
         android:name="com.example.final_project_android.new_inspection_form"
         android:label="new_inspection_form" />
     <fragment
-        android:id="@+id/inspector_schedule2"
+        android:id="@+id/inspector_schedule"
         android:name="com.example.final_project_android.inspector_schedule"
         android:label="inspector_schedule" >
         <action
@@ -154,9 +154,9 @@
             app:destination="@id/add_to_schedule" />
     </fragment>
     <fragment
-        android:id="@+id/review_details2"
+        android:id="@+id/inspection_details"
         android:name="com.example.final_project_android.inspection_details"
-        android:label="review_details" />
+        android:label="inspection_details" />
     <fragment
         android:id="@+id/add_to_schedule"
         android:name="com.example.final_project_android.add_to_schedule"
