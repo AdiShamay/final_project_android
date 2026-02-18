@@ -33,7 +33,7 @@ public class Inspection_Request_class {
         this.inspection_time = "";
     }
 
-    // --- Getters and Setters ---
+    // Getters and Setters
 
     public String getRequest_uid() {
         return request_uid;

@@ -98,7 +98,7 @@ public class edit_restaurant_profile extends Fragment {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.exists()) {
-                            // Since it's a query, we must loop through the results (even if there's only one)
+                            // loop through the results
                             for (DataSnapshot child : snapshot.getChildren()) {
                                 Restaurant_class res = child.getValue(Restaurant_class.class);
                                 if (res != null) {
@@ -141,10 +141,10 @@ public class edit_restaurant_profile extends Fragment {
 
         resRef.child(businessId).updateChildren(updates).addOnSuccessListener(aVoid -> {
 
-            // 2. Check if a password update is actually requested
+            // Check if a password update is actually requested
             if (!newPass.isEmpty()) {
                 currentUser.updatePassword(newPass).addOnCompleteListener(task -> {
-                    // IMPORTANT: Check if fragment is still active
+                    // Check if fragment is still active
                     if (isAdded() && getContext() != null) {
                         if (task.isSuccessful()) {
                             Toast.makeText(getContext(), "Profile Updated!", Toast.LENGTH_SHORT).show();

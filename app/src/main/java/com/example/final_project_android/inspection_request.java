@@ -168,6 +168,9 @@ public class inspection_request extends Fragment {
                                         activeRequest = req;
                                         break; // Found an active request
                                     }
+                                    else {
+                                        child.getRef().removeValue();
+                                    }
                                 }
                             }
                         }
@@ -364,7 +367,7 @@ public class inspection_request extends Fragment {
     private void deleteActiveRequest() {
         if (activeRequest == null || activeRequest.getRequest_uid() == null) return;
 
-        //Check if the inspection is scheduled for tomorrow
+        // Check if the inspection is scheduled for today or tomorrow
        if (isDateTooLate(activeRequest.getRequested_date())) {
             Toast.makeText(getContext(), "Inspections scheduled for today or tomorrow cannot be cancelled.", Toast.LENGTH_LONG).show();
             return;
